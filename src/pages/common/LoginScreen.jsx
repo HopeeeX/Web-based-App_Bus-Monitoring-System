@@ -1,9 +1,10 @@
-import React, { useState} from 'react';
+import { useState} from 'react';
 import UbeLogo from '../../assets/images/UbeLogo.png';
 import BusDriver from '../../assets/images/BusDriver.png';
 import User from '../../assets/icons/User.png';
 import Eye from '../../assets/icons/Eye.png';
 import EyeOff from '../../assets/icons/EyeOff.png';
+import {BrowserRouter as Link} from 'react-router-dom'
 
 const LoginScreen = () => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -19,7 +20,7 @@ const LoginScreen = () => {
 
     return (
     <div className='w-full h-screen flex'>
-        <div className='grid grid-cols-2 m-auto shadow-lg rounded-xl overflow-hidden'style={{width:'1057px', height: '661px'}}>
+        <div className='grid grid-cols-2 m-auto shadow-xl rounded-xl overflow-hidden'style={{width:'1057px', height: '661px'}}>
         <div className='hidden md:flex flex-col justify-center items-center'>
             <img src={UbeLogo} alt='logo' style={{ height: '138px' }} />
             <img src={BusDriver} alt='bus-driver' style={{ height: '437.48px', width: '400px'}} />
@@ -44,7 +45,7 @@ const LoginScreen = () => {
                     <img src={isPasswordVisible ? Eye : EyeOff} alt='eye' className='absolute right-3 top-2' style={{height: '24px', width: '24px', cursor: 'pointer'}} onClick={togglePasswordVisibility}/>
                     </div>
                     <div className='mt-2 text-sm text-right text-purple-300'>
-                        <a href='#'>Forgot your password?</a>
+                        <Link to="/forgot">Forgot Password</Link>
                     </div>
                 </div>
                 <button type='submit' className='bg-secondary text-white font-inter rounded-full px-4 py-2 mt-5 font-semibold hover:bg-gray-500' style={{height: '40px', width: '280px'}} onClick={handleLogin}>Login</button>

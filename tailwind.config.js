@@ -16,12 +16,21 @@ export default {
         secondary: '#A7A9AC',
         tertiary: '#E9E9E9',
         highlight: '#c3aecf',
+        fontColor: '#666666',
+        tableFontColor: '#828486',
       }
+    },
+    fontFamily: {
+      'inter': ['Inter', 'sans-serif']
     },
       gradientColorStops: {
         gradient1: {
           'start': '#642F84',
           'end': '#9571ab'
+        },
+        driverGradient:{
+          'start': '#E6E6E6',
+          'end': '#642F84B0'
         }
       }
   },

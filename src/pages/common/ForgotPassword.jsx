@@ -1,5 +1,6 @@
 import React from "react";
 import Mail from '../../assets/icons/Mail.png'
+import {Link} from 'react-router-dom'
 
 
     const ForgotPassword = () => {
@@ -11,7 +12,7 @@ import Mail from '../../assets/icons/Mail.png'
 
     return(
         <div className='w-full h-screen flex items-center'>
-            <div className='bg-primary m-auto rounded-xl overflow-hidden shadow-xl w-[300px] h-[300px] md:h-[320px] md:w-[400px]'>
+            <div className='bg-primary m-auto rounded-xl overflow-hidden shadow-xl w-[300px] h-[350px] md:w-[400px] md:h-[380px]'>
                 <form className="flex flex-col justify-center p-3 mt-4 md:p-5">
                 <h1 className='text-white font-bold text-[30px] md:text-[40px] font-work-sans text-center mb-1 mt-3 md:mt-1'>Forgot Password?</h1>
                 <p className='font-inter sm:text-[8px] md:text-[11px] text-center text-purple-300 pl-16 pr-16'>Enter the email address associated with your account</p>
@@ -25,6 +26,9 @@ import Mail from '../../assets/icons/Mail.png'
                 <div className="mx-auto">
                 <button type='submit' className='bg-secondary text-white text-center font-inter rounded-full mt-4 font-semibold hover:bg-gray-500 w-[250px] h-[35px] md:w-[255px]' onClick={handleLogin}>Send Reset Link</button>
                 </div>
+                <div className='mt-12 text-sm font-semibold text-center text-white'>
+                        <Link to="/">Back to Login</Link>
+                    </div>
                 </form>
             </div>
         </div>

@@ -23,7 +23,7 @@ import Mail from '../../assets/icons/Mail.png'
                     </div>
                 </div>
                 <div className="mx-auto">
-                <button type='submit' className='bg-secondary text-white text-center font-inter rounded-full mt-4 font-semibold hover:bg-gray-500 w-[250px] h-[35px] md:w-[255px]' onClick={handleLogin}>Login</button>
+                <button type='submit' className='bg-secondary text-white text-center font-inter rounded-full mt-4 font-semibold hover:bg-gray-500 w-[250px] h-[35px] md:w-[255px]' onClick={handleLogin}>Send Reset Link</button>
                 </div>
                 </form>
             </div>

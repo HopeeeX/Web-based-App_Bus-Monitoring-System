@@ -23,14 +23,14 @@ import {Link} from 'react-router-dom'
         <div className="w-full h-screen flex">
             <div className="grid grid-cols-1 md:grid-cols-2 m-auto md:h-[550px] shadow-lg rounded-lg sm:max-w-[900px] sm:h-[420px]">
                 <div className="w-[380px] h-[550px] hidden md:block">
-                <img src={UbeImg} alt='logo' className="p-4 mt-5"/>
+                <img src={UbeImg} alt='logo' className="p-3 mt-6 ml-2"/>
                 </div>
 
                 <div className="bg-primary flex flex-col justify-center shadow-lg rounded-lg p-5">
                     <form>
                         <h1 className='text-white font-bold text-4xl font-work-sans text-center mb-3'>User Login</h1>
                         <p className='font-inter text-sm text-center text-purple-300 pb-2 '>Please login to continue</p>
-                    <div className='flex flex-col items-start sm:m-2 md:ml-5 '>
+                    <div className='flex flex-col items-start sm:m-2 md:ml-7'>
                     <label className='text-white font-inter font-semibold text-sm mb-1 mt-5 mr-7
                     ' htmlFor='username'>Username</label>
                     <div className='relative'>
@@ -38,7 +38,7 @@ import {Link} from 'react-router-dom'
                     <img src={User} alt='user' className='absolute right-3 top-2' style={{height: '24px', width: '24px'}}/>
                     </div>
                 </div>
-                <div className='flex flex-col items-start sm:m-2 md:ml-5'>
+                <div className='flex flex-col items-start sm:m-2 md:ml-7'>
                     <label className='text-white font-inter font-semibold text-sm mb-1 mt-5' 
                         htmlFor='password'>Password</label>
                     <div className='relative'>
@@ -49,7 +49,7 @@ import {Link} from 'react-router-dom'
                         <Link to="/forgot">Forgot your Password?</Link>
                     </div>
                 </div>
-                <button type='submit' className='bg-secondary text-white font-inter rounded-full px-4 py-2 mt-3 font-semibold hover:bg-gray-500 sm:ml-2.5 md:ml-6' style={{height: '40px', width: '280px'}} onClick={handleLogin}>Login</button>
+                <button type='submit' className='bg-secondary text-white font-inter rounded-full px-4 py-2 mt-3 font-semibold hover:bg-gray-500 sm:ml-2.5 md:ml-8' style={{height: '40px', width: '280px'}} onClick={handleLogin}>Login</button>
                     </form>
                 </div>
             </div>

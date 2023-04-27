@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Notification from '../assets/icons/Notification.png';
-import Dashboard from '../assets/icons/Dashboard Layout.png';
+import Dashboard from '../assets/icons/Dashboard.png';
 import File from '../assets/icons/File.png';
 import Folder from '../assets/icons/Folder.png';
 import Logout from '../assets/icons/Logout.png';

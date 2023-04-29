@@ -1,8 +1,8 @@
 import React from 'react'
-import Inspection from '../assets/images/Inspection.png'
-const Modal = ({ onClose }) => {
+import Inspection from '../../assets/images/inspectionGIF.gif'
+const InspectionModal = ({ onClose }) => {
   return (
-    <div className='bg-white p-7 rounded-2xl drop-shadow-lg items-center flex flex-col text-center w-[420px]'>
+    <div className='bg-white p-7 rounded-2xl drop-shadow-lg items-center flex flex-col text-center w-[420px]' >
       <img src={Inspection} alt='Inspection icon' className='w-36 h-36'></img>
       <p>Start your inspection!</p>
       <p>Click the “Start” button to proceed.</p>
@@ -16,4 +16,4 @@ const Modal = ({ onClose }) => {
   )
 }
 
-export default Modal
+export default InspectionModal

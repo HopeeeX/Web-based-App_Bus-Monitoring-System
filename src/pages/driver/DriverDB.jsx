@@ -1,5 +1,5 @@
 import React from 'react';
-import Sidebar from '../../components/SideBar1';
+import Sidebar from '../../components/SideBar';
 import { Outlet } from 'react-router-dom';
 import tw from 'tailwind-styled-components';
 
@@ -16,11 +16,11 @@ const DriverDB = () => {
   return (
     <DBWrapper>
       <SidebarFrame>
-      <Sidebar />
+      <Sidebar/>
       </SidebarFrame>
       <MapWrapper>
         {/* Render the child routes based on the URL path */}
-        <Outlet />
+        <Outlet/>
       </MapWrapper>
     </DBWrapper>
   );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Modal from '../../components/Modal';
 import Map from '../../components/Map';
 import tw from 'tailwind-styled-components';
+import InspectionModal from '../../components/Modals/InspectionModal';
 
 const DriverMain = () => {
   const [showModal, setShowModal] = useState(false);
@@ -39,10 +39,9 @@ const DriverMain = () => {
           Create a Trip
         </TripButton>
       </Container>
-      {showModal && (
-        <ModalWrapper>
-          <Modal onClose={handleCloseModal} /> {/* Render the Modal component */}
-        </ModalWrapper>
+{showModal && (
+        <div className='fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center'>
+          <InspecrtionModal onClose={handleCloseModal} /> 
       )}
 
     </MainWrapper>

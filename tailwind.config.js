@@ -23,7 +23,8 @@ export default {
       }
     },
     fontFamily: {
-      'inter': ['Inter', 'sans-serif']
+      'inter': ['Inter', 'sans-serif'],
+      'worksans': ['Work Sans', 'sans-serif']
     },
       gradientColorStops: {
         gradient1: {

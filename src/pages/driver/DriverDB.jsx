@@ -1,16 +1,28 @@
 import React from 'react';
 import Sidebar from '../../components/SideBar1';
 import { Outlet } from 'react-router-dom';
+import tw from 'tailwind-styled-components';
+
+const DBWrapper = tw.div`
+  flex flex-cols`;
+
+const MapWrapper = tw.div`
+  w-4/5`;
+
+const SidebarFrame = tw.div`
+  w-1/5`;
 
 const DriverDB = () => {
   return (
-    <div className='flex flex-none w-full h-full gap-4'>
+    <DBWrapper>
+      <SidebarFrame>
       <Sidebar />
-      <div className='pl-[300px] max-w-screen'>
+      </SidebarFrame>
+      <MapWrapper>
         {/* Render the child routes based on the URL path */}
         <Outlet />
-      </div>
-    </div>
+      </MapWrapper>
+    </DBWrapper>
   );
 };
 

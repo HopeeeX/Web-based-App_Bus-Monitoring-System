@@ -16,13 +16,15 @@ export default {
         primary: '#642F84',
         secondary: '#A7A9AC',
         tertiary: '#E9E9E9',
-        highlight: '#c3aecf',
+        highlight: '#D69CF9',
+        sidebar: '#784a94',
         fontColor: '#666666',
         tableFontColor: '#828486',
       }
     },
     fontFamily: {
-      'inter': ['Inter', 'sans-serif']
+      'inter': ['Inter', 'sans-serif'],
+      'worksans': ['Work Sans', 'sans-serif']
     },
       gradientColorStops: {
         gradient1: {

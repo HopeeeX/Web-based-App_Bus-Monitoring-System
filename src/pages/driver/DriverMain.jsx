@@ -39,9 +39,10 @@ const DriverMain = () => {
           Create a Trip
         </TripButton>
       </Container>
-{showModal && (
+  {showModal && (
         <div className='fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center'>
-          <InspecrtionModal onClose={handleCloseModal} /> 
+          <InspectionModal onClose={handleCloseModal} /> 
+        </div>
       )}
 
     </MainWrapper>

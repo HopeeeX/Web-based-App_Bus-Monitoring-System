@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import InspectionModal from '../../components/Modals/InspectionModal';
-import AddUserModal from '../../components/Modals/AddUserModal';
 
 const DriverMain = () => {
   const [showModal, setShowModal] = useState(false);
@@ -24,10 +23,9 @@ const DriverMain = () => {
         Create a Trip
       </button>
 
-      {showModal && (
+{showModal && (
         <div className='fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center'>
-          <AddUserModal onClose={handleCloseModal} /> 
-        </div>
+          <InspecrtionModal onClose={handleCloseModal} /> 
       )}
     </div>
   );

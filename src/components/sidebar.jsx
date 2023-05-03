@@ -1,45 +1,145 @@
-import React from 'react';
+import { useState } from 'react';
+import { FaBars } from 'react-icons/fa';
+import { FiX } from 'react-icons/fi';
 import { Link, useLocation } from 'react-router-dom';
-import Notification from '../assets/icons/Notification.png';
-import Dashboard from '../assets/icons/Dashboard Layout.png';
+import tw from 'tailwind-styled-components';
+import Back from '../assets/icons/Back.png';
+import Person from '../assets/images/Person.png';
+import Dashboard from '../assets/icons/Dashboard.png';
 import File from '../assets/icons/File.png';
 import Folder from '../assets/icons/Folder.png';
 import Logout from '../assets/icons/Logout.png';
+import SBMenuItem from './SBMenuItem';
+
+
+const SidebarContainer = tw.div`
+    fixed top-0 left-0 w-full h-full z-50 bg-gray-900 bg-opacity-50`;
+
+const SidebarWrapper = tw.div`
+    fixed top-0 left-0 w-1/5 h-full bg-sidebar text-white transition-all duration-300 ease-in-out`;
+
+const SidebarTitleWrapper = tw.div`
+    h-35 px-5 md:pt-6`;
+
+const SidebarTitle = tw.h2`
+    text-sm font-inter font-semibold font-white`;
+
+const SideBarProfileWrapper = tw.div`
+    pt-4 flex md:pt-3`;
+
+const SideBarProfileImage = tw.img`
+    h-[80px] w-[80px]`;
+
+const SidebarCloseButton = tw.button`
+    focus:outline-none pl-[215px] pt-4`;
+
+const SidebarBackIcon = tw.img`
+    w-[28px] h-[28px]`
+
+const SideBarTextWrapper = tw.div`
+    flex flex-col`;
+
+const SideBarProfileText1 = tw.h4`
+    text-white font-inter font-semibold text-[17px] pl-2 pt-3`;
+
+const SideBarProfileText2 = tw.h5`
+    text-white font-inter font-semibold text-[15px] pl-2 pt-2`;
+
+const SidebarMenu = tw.ul`
+    py-0 pt-5 md:pt-0 `;
+
+const SidebarMenuItem = tw.li`
+    flex px-4 py-2 mt-1 ml-2 hover:bg-highlight/40 cursor-pointer rounded-lg w-[240px] md:mt-2`;
+
+const SideBarMenuIcon = tw.img`
+    w-[25px] h-[25px] ml-1.5 mr-4`;
+
+const SideBarMenuText = tw.h3`
+    text-white font-inter font-semibold text-[16px]`;
+
+const SideBarFooterWrapper = tw.div`
+    absolute bottom-0 w-full py-4`;
+
+const SideBarFooter = tw.div`
+    border-t border-zinc-300`;
+
+const SidebarMobileButton = tw.button`
+    block lg:hidden text-gray-500 hover:text-white focus:outline-none focus:text-white transition duration-150 ease-in-out mt-6 ml-5`;
 
 const Sidebar = () => {
-  const location = useLocation();
-  return (
-    <div className='w-80 h-full bg-white p-5 pt-8 flex flex-col font-inter font-semibold text-xl'>
-      <img src={Notification} alt='notification' className='h-8 w-8  self-end' />
-      {/* Profile part */}
-      <div className='flex flex-col gap-2.5 mb-8'>
-        <h3 className='text-fontColor ml-2'>Profile</h3>
-        <div className='flex flex-row items-center'>
-          <img src='https://i.ibb.co/ZNFhcFB/sdxzd.jpg' alt='plchldr.co' className='w-20 h-20 rounded-full' />
-          <div className='flex flex-col text-lg ml-3'>
-            <h4>Mabuna, Kyle</h4>
-            <h4>Driver </h4>
-          </div>
-        </div>
-      </div>
+    const [showSidebar, setShowSidebar] = useState(false);
 
-      {/* Dashboard */}
-      <div className='flex flex-col gap-7 text-lg w-60'>
-        <Link to='/driver' className={`p-2.5 gap-4 flex flex-wrap rounded-lg ${location.pathname === '/driver' ? 'bg-primary/40 text-white' : ''}`}>
-          <img src={Dashboard} alt='dashboard icon' className='h-[30px] w-[30px]'></img>Dashboard
-        </Link>
-        <Link to='/driver/reports' className={`p-2.5 gap-4 flex flex-wrap rounded-lg  ${location.pathname === '/driver/reports' ? 'bg-primary/40 text-white' : ''}`}>
-          <img src={File} alt='file icon' className='h-[30px] w-[30px]'></img>Inspection Reports
-        </Link>
-        <Link to='/driver/trips' className={`p-2.5 gap-4 flex flex-wrap rounded-lg  ${location.pathname === '/driver/trips' ? 'bg-primary/40 text-white' : ''}`}>
-          <img src={Folder} alt='folder icon' className='h-[30px] w-[30px]'></img>Trip Summary
-        </Link>
-        <Link to='/' className={`p-2.5 gap-4 flex flex-wrap rounded-lg  ${location.pathname === '/' ? 'bg-primary/40 text-white' : ''}`}>
-          <img src={Logout} alt='logout icon' className='h-[30px] w-[30px]'></img>Logout
-        </Link>
-      </div>
-    </div>
-  );
+const handleSidebarToggle = () => {
+    setShowSidebar(!showSidebar);
+
+};
+const location = useLocation();
+    return (
+    <>
+        <SidebarMobileButton onClick={handleSidebarToggle}>
+            {showSidebar ? <FiX size={20} /> : <FaBars size={20} />}
+        </SidebarMobileButton>
+        {showSidebar ? (
+        <SidebarContainer>
+            <SidebarWrapper>
+                <SidebarCloseButton onClick={handleSidebarToggle}>
+                    <SidebarBackIcon src={Back} alt='back'/>
+                </SidebarCloseButton>
+                <SidebarTitleWrapper>
+                    <SidebarTitle>Profile</SidebarTitle>
+                    <SideBarProfileWrapper>
+                        <SideBarProfileImage src={Person} alt='image'/>
+                    <SideBarTextWrapper>
+                        <SideBarProfileText1>Kyle Mabuna</SideBarProfileText1>
+                        <SideBarProfileText2>Driver</SideBarProfileText2>
+                    </SideBarTextWrapper> 
+                    </SideBarProfileWrapper>
+                </SidebarTitleWrapper>
+                <SidebarMenu>
+                    <SidebarTitleWrapper>
+                        <SidebarTitle>Menu</SidebarTitle>
+                    </SidebarTitleWrapper>
+                    <SBMenuItem to="/driver" iconSrc={Dashboard} iconAlt='dashboard' text='Dashboard' />
+                    <SBMenuItem to="/driver/reports" iconSrc={File} iconAlt='file' text='Inspection Reports' />
+                    <SBMenuItem to="/driver/trips" iconSrc={Folder} iconAlt='folder' text='Trip Summary' />
+                        <SideBarFooterWrapper>
+                        <SideBarFooter>
+                        <SBMenuItem to="/" iconSrc={Logout} iconAlt='logout' text='Logout' />
+                        </SideBarFooter>
+                        </SideBarFooterWrapper>
+                    </SidebarMenu>
+            </SidebarWrapper>
+        </SidebarContainer>
+        ): 
+        ( 
+        <SidebarWrapper className="hidden md:block">
+            <SidebarTitleWrapper>
+                <SidebarTitle>Profile</SidebarTitle>
+                    <SideBarProfileWrapper>
+                        <SideBarProfileImage src={Person} alt='image'/>
+                    <SideBarTextWrapper>
+                        <SideBarProfileText1>Kyle Mabuna</SideBarProfileText1>
+                        <SideBarProfileText2>Driver</SideBarProfileText2>
+                    </SideBarTextWrapper>
+                    </SideBarProfileWrapper>
+            </SidebarTitleWrapper>
+            <SidebarMenu>
+            <SidebarTitleWrapper>
+                        <SidebarTitle>Menu</SidebarTitle>
+                    </SidebarTitleWrapper>
+                    <SBMenuItem to="/driver" iconSrc={Dashboard} iconAlt='dashboard' text='Dashboard' />
+                    <SBMenuItem to="/driver/reports" iconSrc={File} iconAlt='file' text='Inspection Reports' />
+                    <SBMenuItem to="/driver/trips" iconSrc={Folder} iconAlt='folder' text='Trip Summary' />
+                        <SideBarFooterWrapper>
+                        <SideBarFooter>
+                        <SBMenuItem to="/" iconSrc={Logout} iconAlt='logout' text='Logout' />
+                        </SideBarFooter>
+                        </SideBarFooterWrapper>
+            </SidebarMenu>
+        </SidebarWrapper>
+        )}
+    </>
+    );
 };
 
 export default Sidebar;

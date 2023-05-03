@@ -5,8 +5,7 @@ import DriverDB from './pages/driver/DriverDB';
 import DriverMain from './pages/driver/DriverMain';
 import DriverReports from './pages/driver/DriverReports';
 import DriverTrips from './pages/driver/DriverTrips';
-import SideBar from './components/SideBar1';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
@@ -14,7 +13,6 @@ function App() {
       <Routes>
         <Route path='/' element={<LoginPage />}/>
         <Route path='/forgot' element={<ForgotPassword />} />
-        <Route path='/side' element={<SideBar/>} />
         <Route path='/driver/*' element={<DriverDB />}>
           <Route index element={<DriverMain />} />
           <Route path='reports' element={<DriverReports />} />

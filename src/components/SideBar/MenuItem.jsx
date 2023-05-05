@@ -19,10 +19,8 @@ const SideBarMenuText = tw.h3`
         return (
             <Link to={to} className={`${location.pathname === to}`}>
             <SidebarMenuItem>
-            
             <SideBarMenuIcon src={iconSrc} alt={iconAlt}/>
             <SideBarMenuText>{text}</SideBarMenuText>
-            
         </SidebarMenuItem>
         </Link>
         );

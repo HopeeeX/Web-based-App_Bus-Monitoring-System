@@ -12,11 +12,11 @@ const Map = () => {
     }, []);
     return (
         <MapWrapper>
-            <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true} style={{ height: "100vh", width: "83.5vw" }}>
+            <MapContainer center={[14.5995, 120.9842]} zoom={13} scrollWheelZoom={true} style={{ height: "100vh", width: "83.5vw" }}>
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-            <Marker position={[51.505, -0.09]}>
+            <Marker position={[14.5995, 120.9842]}>
             <Popup>
                 Hi! Annyeonghaseyo.
             </Popup>

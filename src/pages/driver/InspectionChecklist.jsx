@@ -29,7 +29,7 @@ const InspectionChecklist = () => {
             <label for="remarksInput" class="form-label" className='text-base sm:text-lg md:text-xl lg:text-2xl'>Remarks</label>
             <input type="text" class="form-control" id="remarksInput" placeholder="Enter your remarks" className='remarkInputs focus:outline-none focus:border-fontColor w-full' required/>
           </div>
-          <button className='buttonTemplate self-stretch'>SUBMIT</button>
+          <button className='border outline-none buttonTemplate self-stretch'>SUBMIT</button>
         </div>
       </div>
     </MainWrapper>

@@ -7,7 +7,7 @@ const InspectionModal = ({ onClose }) => {
       <p>Start your inspection!</p>
       <p>Click the “Start” button to proceed.</p>
       <button
-        className='bg-primary w-80 font-inter text-xl text-white px-4 py-2 mt-5 text-center font-semibold rounded-2xl'
+        className='border outline-none bg-primary w-80 font-inter text-xl text-white px-4 py-2 mt-5 text-center font-semibold rounded-2xl'
         onClick={onClose}
       >
         Start

@@ -49,7 +49,7 @@ import {Link} from 'react-router-dom'
                         <Link to="/forgot">Forgot your Password?</Link>
                     </div>
                 </div>
-                <button type='submit' className='bg-secondary text-white font-inter rounded-full px-4 py-2 mt-3 font-semibold hover:bg-gray-500 sm:ml-2.5 md:ml-8' style={{height: '40px', width: '280px'}} onClick={handleLogin}>Login</button>
+                <button type='submit' className='border outline-none bg-secondary text-white font-inter rounded-full px-4 py-2 mt-3 font-semibold hover:bg-gray-500 sm:ml-2.5 md:ml-8' style={{height: '40px', width: '280px'}} onClick={handleLogin}>Login</button>
                     </form>
                 </div>
             </div>

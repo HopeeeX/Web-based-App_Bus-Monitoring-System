@@ -12,6 +12,9 @@ export default {
       'xl' : '1440px',
     },
     extend: {
+      width : {
+        "map" : "84vw"
+      },
       colors:{
         primary: '#642F84',
         secondary: '#A7A9AC',

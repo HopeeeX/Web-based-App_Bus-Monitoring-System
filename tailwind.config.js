@@ -23,6 +23,8 @@ export default {
         sidebar: '#784a94',
         fontColor: '#666666',
         tableFontColor: '#828486',
+        inspectionTitle: '#504848',
+        inspectionList: '#797878',
       }
     },
     fontFamily: {

@@ -5,6 +5,7 @@ import DriverDB from './pages/driver/DriverDB';
 import DriverMain from './pages/driver/DriverMain';
 import DriverReports from './pages/driver/DriverReports';
 import DriverTrips from './pages/driver/DriverTrips';
+import Inspection from './pages/driver/InspectionChecklist';
 import { Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path='reports' element={<DriverReports />} />
           <Route path='trips' element={<DriverTrips />} />
         </Route>
+        <Route path='/inspection' element={<Inspection />} />
       </Routes>
   );
 }

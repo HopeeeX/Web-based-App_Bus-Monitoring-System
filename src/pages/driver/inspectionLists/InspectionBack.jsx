@@ -1,17 +1,43 @@
 import React, { useState } from 'react'
+import UploadPhoto from '../../../components/Modals/UploadPhoto';
 import {inspectionBack} from '../../../constants'
 
 const InspectionBack = () => {
+
   const [toggleState, setToggleState] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState(null);
 
   const handleToggle = (id) => {
-      setToggleState((prevState) => ({
-        ...prevState,
-        [id]: !prevState[id], 
-      }));
-    };
+    if (!toggleState[id]) {
+      setSelectedItemId(id);
+      setIsModalOpen(true);
+    } else {
+      updateToggleState(id);
+    }
+  };
+  
+  const updateToggleState = (id) => {
+    setToggleState((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedItemId(null);
+  };
+
+  const handleUpload = () => {
+    if (selectedItemId) {
+      updateToggleState(selectedItemId);
+      closeModal();
+    }
+  };
 
   return (
+    <div>
     <div className="text-center w-80 sm:w-96 md:w-[30rem] lg:w-[40rem]  px-2 sm:px-6 md:px-12 pb-5 md:pt-5 lg:pt-10 md:pb-16 font-medium bg-white drop-shadow-xl">
         <h2 className="text-2xl md:text-3xl lg:text-4xl  text-inspectionTitle my-6">BACK</h2>
         {inspectionBack.map((item) => (
@@ -27,6 +53,10 @@ const InspectionBack = () => {
             </button>
           </div>
         ))}
+    </div>
+    {isModalOpen && (
+        <UploadPhoto onClose={closeModal} onUpload={handleUpload} />
+      )}
     </div>
   )
 }

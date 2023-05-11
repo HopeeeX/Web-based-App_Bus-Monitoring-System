@@ -67,18 +67,14 @@ export const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    if (state.user) {
-    //   navigate("/driver");
-    }
-  }, [navigate, state.user]);
-
   return (
     <AuthContext.Provider value={{ user: state.user, logout, signIn }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
+
 
 export const UserAuth = () => {
   return useContext(AuthContext);

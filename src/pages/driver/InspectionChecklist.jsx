@@ -25,9 +25,9 @@ const InspectionChecklist = () => {
         <InspectionLeft/>
         <div className='flex flex-col gap-8 items-center'>
           <InspectionInside/>
-          <div class="remarksContainer">
-            <label for="remarksInput" class="form-label" className='text-base sm:text-lg md:text-xl lg:text-2xl'>Remarks</label>
-            <input type="text" class="form-control" id="remarksInput" placeholder="Enter your remarks" className='remarkInputs focus:outline-none focus:border-fontColor w-full' required/>
+          <div className="remarksContainer">
+            <label htmlFor="remarksInput" className='text-base sm:text-lg md:text-xl lg:text-2xl'>Remarks</label>
+            <input type="text" id="remarksInput" placeholder="Enter your remarks" className='remarkInputs focus:outline-none focus:border-fontColor w-full' required/>
           </div>
           <button className='border outline-none buttonTemplate self-stretch'>SUBMIT</button>
         </div>

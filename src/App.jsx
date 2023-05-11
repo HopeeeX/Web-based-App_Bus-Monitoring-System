@@ -10,17 +10,18 @@ import { Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './components/Auth/Auth';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
 
+
 function App() {
   return (
     <AuthProvider>
       <Routes>
         <Route path='/' element={<LoginPage />}/>
         <Route path='/forgot' element={<ForgotPassword />} />
-        <Route path='/driver/*' element={<DriverDB />}>
+        {/* <Route path='/driver/*' element={<DriverDB />}> */}
           {/*Protected Route when Auth is Enabled*/}
-        {/* <Route path='/driver/*' element={<ProtectedRoute>
+        <Route path='/driver/*' element={<ProtectedRoute>
           <DriverDB />
-        </ProtectedRoute>}> */}
+        </ProtectedRoute>}>
           <Route index element={<DriverMain />} />
           <Route path='reports' element={<DriverReports />} />
           <Route path='trips' element={<DriverTrips />} />

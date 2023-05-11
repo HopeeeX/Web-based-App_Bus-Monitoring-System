@@ -4,8 +4,6 @@ import User from '../../assets/icons/User.png';
 import Eye from '../../assets/icons/Eye.png';
 import EyeOff from '../../assets/icons/EyeOff.png';
 import {Link, useNavigate} from 'react-router-dom'
-import { auth } from "../../../firebase"
-import { signInWithEmailAndPassword } from "@firebase/auth";
 import { UserAuth } from "../../components/Auth/Auth";
 
     const LoginPage = () => {
@@ -17,8 +15,7 @@ import { UserAuth } from "../../components/Auth/Auth";
         const handleSubmit = async (e) => {
             e.preventDefault();
             try{
-                await signIn(email, password)
-                navigate("/driver");
+                await signIn(email, password);
             } catch(e){
                 console.log(e.message)
             }

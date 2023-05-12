@@ -44,7 +44,7 @@ const InspectionRight = () => {
           <div key={item.id} className="flex justify-between items-center text-xs sm:text-sm md:text-lg lg:text-xl my-[14px]">
             <p className="w-9/12 py-1 md:py-2 lg:py-[10px] pl-2 md:pl-4 lg:pl-8 text-start text-inspectionList bg-[#E6E3E3BA]">{item.title}</p>
             <button
-              className={`w-3/12 py-1 md:py-2 lg:py-[10px] px-1 ${
+              className={`border outline-none w-3/12 py-1 md:py-2 lg:py-[10px] px-1 ${
                 toggleState[item.id] ? "bg-[#FF8B85] text-[#BF4842]" : "bg-[#77DD77] text-[#106710E0]"
               }`}
               onClick={() => handleToggle(item.id)}

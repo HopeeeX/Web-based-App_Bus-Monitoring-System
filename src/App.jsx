@@ -26,8 +26,9 @@ function App() {
           <Route path='reports' element={<DriverReports />} />
           <Route path='trips' element={<DriverTrips />} />
         </Route>
-        <Route path='/inspection' element={<Inspection />} />
-
+        <Route path='inspection' element={<ProtectedRoute>
+          <Inspection/>
+        </ProtectedRoute>} />
       </Routes>
     </AuthProvider>
 

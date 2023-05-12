@@ -12,7 +12,6 @@ import { AuthProvider } from './components/Auth/Auth';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
 import { InspectionProvider } from './pages/driver/inspectionLists/InspectionContext';
 import AdminDB from './pages/admin/AdminDB';
-import SuperAdminDB from './pages/superadmin/SuperAdminDB';
 
 
 function App() {

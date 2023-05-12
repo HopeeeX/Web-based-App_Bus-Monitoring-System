@@ -50,8 +50,21 @@ const SidebarMenu = tw.ul`
 const SidebarMobileButton = tw.button`
     block lg:hidden text-gray-500 hover:text-white focus:outline-none focus:text-white transition duration-150 ease-in-out mt-6 ml-5`;
 
+const getCookieValue = (name) => {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.startsWith(name + '=')) {
+            return cookie.substring(name.length + 1);
+          }
+        }
+        return '';
+      }
+
 const Sidebar = () => {
     const [showSidebar, setShowSidebar] = useState(false);
+
+    const displayName= getCookieValue('name');
 const handleSidebarToggle = () => {
     setShowSidebar(!showSidebar);
 
@@ -97,7 +110,7 @@ const handleSidebarToggle = () => {
                     <SideBarProfileWrapper>
                         <SideBarProfileImage src={Person} alt='image'/>
                     <SideBarTextWrapper>
-                        <SideBarProfileText1>Kyle Mabuna</SideBarProfileText1>
+                        <SideBarProfileText1>{displayName}</SideBarProfileText1>
                         <SideBarProfileText2>Driver</SideBarProfileText2>
                     </SideBarTextWrapper>
                     </SideBarProfileWrapper>

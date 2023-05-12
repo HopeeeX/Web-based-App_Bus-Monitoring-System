@@ -43,7 +43,15 @@ export const AuthProvider = ({ children }) => {
       const displayName = currentUser.userdata?.name;
       setAuthCookies(tokenResult, displayName);
       setState({ user: userCredential.user });
-      navigate("/driver")
+      switch(currentUser.persona){
+        case "driver":
+          navigate("/driver");
+          break;
+        case "mechanic":
+          navigate("/mechanic");
+          break;
+      }
+
     } catch (error) {
       console.error(error);
       throw new Error("Invalid email or password.");

@@ -9,6 +9,7 @@ import Inspection from './pages/driver/InspectionChecklist';
 import { Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './components/Auth/Auth';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
+import { InspectionProvider } from './pages/driver/inspectionLists/InspectionContext';
 
 
 function App() {
@@ -27,7 +28,10 @@ function App() {
           <Route path='trips' element={<DriverTrips />} />
         </Route>
         <Route path='inspection' element={<ProtectedRoute>
+          <InspectionProvider>
           <Inspection/>
+          </InspectionProvider>
+
         </ProtectedRoute>} />
       </Routes>
     </AuthProvider>

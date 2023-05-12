@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import {inspectionFront} from '../../../constants'
 import UploadPhoto from '../../../components/Modals/UploadPhoto';
+import { InspectionAccess } from './InspectionContext';
 
 const InspectionFront = () => {
 
   const [toggleState, setToggleState] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
+  const { toggleDamaged } = InspectionAccess();
 
   const handleToggle = (id) => {
     if (!toggleState[id]) {
@@ -22,6 +24,7 @@ const InspectionFront = () => {
       ...prevState,
       [id]: !prevState[id],
     }));
+    toggleDamaged(id);
   };
 
   const closeModal = () => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import tw from 'tailwind-styled-components'
-import SideBarAdmin from '../../components/SideBar/SideBarAdmin';
+import SideBarSuperAdmin from '../../components/SideBar/SideBarSuperAdmin';
 
 const Wrapper = tw.div`
     flex flex-cols`;
@@ -8,14 +8,14 @@ const Wrapper = tw.div`
 const SidebarContainer = tw.div`
     md:w-64 sm:w-0`;
 
-const AdminDB = () => {
+const SuperAdminDB = () => {
     return (
-    <Wrapper>
+        <Wrapper>
         <SidebarContainer>
-            <SideBarAdmin/>
+            <SideBarSuperAdmin/>
         </SidebarContainer>
     </Wrapper>
     );
 }
 
-export default AdminDB;
+export default SuperAdminDB;

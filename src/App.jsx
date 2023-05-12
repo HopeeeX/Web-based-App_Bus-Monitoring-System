@@ -6,10 +6,13 @@ import DriverMain from './pages/driver/DriverMain';
 import DriverReports from './pages/driver/DriverReports';
 import DriverTrips from './pages/driver/DriverTrips';
 import Inspection from './pages/driver/InspectionChecklist';
+import MechanicDB from './pages/mechanic/MechanicDB';
 import { Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './components/Auth/Auth';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
 import { InspectionProvider } from './pages/driver/inspectionLists/InspectionContext';
+import AdminDB from './pages/admin/AdminDB';
+import SuperAdminDB from './pages/superadmin/SuperAdminDB';
 
 
 function App() {
@@ -33,6 +36,12 @@ function App() {
           </InspectionProvider>
 
         </ProtectedRoute>} />
+        <Route path='/mechanic/*' element= {<MechanicDB/>} />
+
+        <Route path='/admin/*' element= {<AdminDB/>} />
+
+        <Route path='/superadmin/*' element= {<SuperAdminDB/>} />
+
       </Routes>
     </AuthProvider>
 

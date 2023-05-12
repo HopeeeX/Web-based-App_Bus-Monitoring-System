@@ -11,7 +11,7 @@ class CurrentUser {
   }
 
   async fetchUser(user) {
-    const personas = ["admins", "drivers", "mechanics"];
+    const personas = ["admins", "drivers", "mechanics","superadmins"];
     for (const element of personas) {
       const docRef = doc(firestore, element, user.uid);
       const docSnap = await getDoc(docRef);

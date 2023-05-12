@@ -12,8 +12,11 @@ import { useNavigate } from "react-router";
 
 const AuthContext = createContext();
 
-const setAuthCookies = (tokenResult, displayName) => {
+const setAuthCookies = (tokenResult, displayName, persona) => {
   document.cookie = `name=${displayName}; path=/; expires=${new Date(
+    tokenResult.expirationTime
+  ).toUTCString()}; secure`;
+  document.cookie = `persona=${persona}; path=/; expires=${new Date(
     tokenResult.expirationTime
   ).toUTCString()}; secure`;
   document.cookie = `session=${tokenResult.token}; path=/; expires=${new Date(
@@ -36,12 +39,12 @@ export const AuthProvider = ({ children }) => {
       const currentUser = await new CurrentUser(userCredential.user);
   
       // Wait until userdata is not null or undefined
-      while (currentUser.userdata === null || currentUser.userdata === undefined) {
+      while (currentUser.userdata === null || currentUser.userdata === undefined || currentUser.persona == null || currentUser.persona == undefined) {
         await new Promise(resolve => setTimeout(resolve, 100)); // Wait for 100ms
       }
   
       const displayName = currentUser.userdata?.name;
-      setAuthCookies(tokenResult, displayName);
+      setAuthCookies(tokenResult, displayName, currentUser.persona);
       setState({ user: userCredential.user });
       switch(currentUser.persona){
         case "driver":
@@ -49,6 +52,12 @@ export const AuthProvider = ({ children }) => {
           break;
         case "mechanic":
           navigate("/mechanic");
+          break;
+        case "admin":
+          navigate("/admin");
+          break;
+        case "superadmin":
+          navigate("/admin");
           break;
       }
 

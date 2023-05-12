@@ -40,8 +40,6 @@ function App() {
 
         <Route path='/admin/*' element= {<AdminDB/>} />
 
-        <Route path='/superadmin/*' element= {<SuperAdminDB/>} />
-
       </Routes>
     </AuthProvider>
 

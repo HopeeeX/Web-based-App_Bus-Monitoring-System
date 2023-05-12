@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
-import UploadPhoto from '../../components/Modals/UploadPhoto';
+import InspectionModal from '../../components/Modals/InspectionModal';
 import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet'
 import DrawerIcon from '../../assets/icons/Menu.png'
 
@@ -51,7 +51,7 @@ const DriverMain = () => {
         </TripButton>
       {showModal && (
         <ModalWrapper>
-          <UploadPhoto onClose={handleCloseModal} /> 
+          <InspectionModal onClose={handleCloseModal} /> 
         </ModalWrapper>
       )}
     </MainWrapper>

@@ -24,7 +24,7 @@ import {Link} from 'react-router-dom'
                     </div>
                 </div>
                 <div className="mx-auto">
-                <button type='submit' className='bg-secondary text-white text-center font-inter rounded-full mt-4 font-semibold hover:bg-gray-500 w-[250px] h-[35px] md:w-[255px]' onClick={handleLogin}>Send Reset Link</button>
+                <button type='submit' className='border outline-none bg-secondary text-white text-center font-inter rounded-full mt-4 font-semibold hover:bg-gray-500 w-[250px] h-[35px] md:w-[255px]' onClick={handleLogin}>Send Reset Link</button>
                 </div>
                 <div className='mt-12 text-sm font-semibold text-center text-white'>
                         <Link to="/">Back to Login</Link>

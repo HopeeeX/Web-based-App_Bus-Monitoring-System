@@ -25,7 +25,13 @@ export default {
         tableFontColor: '#828486',
         inspectionTitle: '#504848',
         inspectionList: '#797878',
+        navbarColorText: '#555555',
+        passengerBusLocation: '#EFEFEF'
+      },
+      boxShadow: {
+        'rating': '0px 4px 4px rgba(0, 0, 0, 0.25)'
       }
+     
     },
     fontFamily: {
       'inter': ['Inter', 'sans-serif'],

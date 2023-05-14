@@ -6,6 +6,7 @@ import DriverMain from './pages/driver/DriverMain';
 import DriverReports from './pages/driver/DriverReports';
 import DriverTrips from './pages/driver/DriverTrips';
 import Inspection from './pages/driver/InspectionChecklist';
+import Passenger from './pages/passenger/MainPageScreen';
 import MechanicDB from './pages/mechanic/MechanicDB';
 import { Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './components/Auth/Auth';
@@ -29,6 +30,7 @@ function App() {
           <Route path='reports' element={<DriverReports />} />
           <Route path='trips' element={<DriverTrips />} />
         </Route>
+        <Route path='passenger' element={<Passenger/>} />
         <Route path='inspection' element={<ProtectedRoute>
           <InspectionProvider>
           <Inspection/>

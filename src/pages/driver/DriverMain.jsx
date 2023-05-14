@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import tw from 'tailwind-styled-components';
-import UploadPhoto from '../../components/Modals/UploadPhoto';
+import InspectionModal from '../../components/Modals/InspectionModal';
 import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet'
 import DrawerIcon from '../../assets/icons/Menu.png'
 
@@ -19,7 +19,7 @@ const DriverMain = () => {
   const MainWrapper = tw.div``;
 
   const TripButton = tw.button`
-    bg-primary fixed z-999 bottom-0 left-1/2 ml-32 transform -translate-x-2/3 sm:-translate-x-1/2 mb-16 text-white font-inter rounded-full px-4 py-2 mt-5 font-semibold hover:bg-purple-900 transition-all h-[40px] w-[280px] sm:ml-0 md:ml-32
+    border outline-none bg-primary fixed z-999 bottom-0 left-1/2 ml-32 transform -translate-x-2/3 sm:-translate-x-1/2 mb-16 text-white font-inter rounded-full px-4 py-2 mt-5 font-semibold hover:bg-purple-900 transition-all h-[40px] w-[280px] sm:ml-0 md:ml-32
   `;
 
   const ModalWrapper = tw.div`
@@ -51,7 +51,7 @@ const DriverMain = () => {
         </TripButton>
       {showModal && (
         <ModalWrapper>
-          <UploadPhoto onClose={handleCloseModal} /> 
+          <InspectionModal onClose={handleCloseModal} /> 
         </ModalWrapper>
       )}
     </MainWrapper>

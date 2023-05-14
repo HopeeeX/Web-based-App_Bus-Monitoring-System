@@ -1,9 +1,9 @@
 import React from 'react';
-import Sidebar from '../../components/SideBar/SideBarDriver';
+import SideBarDriver from '../../components/SideBar/SideBarDriver';
 import { Outlet } from 'react-router-dom';
 import tw from 'tailwind-styled-components';
 
-const DBWrapper = tw.div`
+const Wrapper = tw.div`
   flex flex-cols`;
 
 const SidebarContainer = tw.div`
@@ -13,13 +13,13 @@ const DriverDB = () => {
 
 
   return (
-    <DBWrapper>
+    <Wrapper>
       <SidebarContainer>
-      <Sidebar />
+      <SideBarDriver />
       </SidebarContainer>
         {/* Render the child routes based on the URL path */}
         <Outlet />
-    </DBWrapper>
+    </Wrapper>
   );
 };
 

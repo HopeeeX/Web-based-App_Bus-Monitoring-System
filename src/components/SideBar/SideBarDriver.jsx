@@ -53,15 +53,15 @@ const SidebarMobileButton = tw.button`
 const getCookieValue = (name) => {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.startsWith(name + '=')) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith(name + '=')) {
             return cookie.substring(name.length + 1);
-          }
+            }
         }
         return '';
-      }
+        }
 
-const Sidebar = () => {
+const SidebarDriver = () => {
     const [showSidebar, setShowSidebar] = useState(false);
 
     const displayName= getCookieValue('name');
@@ -86,7 +86,7 @@ const handleSidebarToggle = () => {
                     <SideBarProfileWrapper>
                         <SideBarProfileImage src={Person} alt='image'/>
                     <SideBarTextWrapper>
-                        <SideBarProfileText1>Kyle Mabuna</SideBarProfileText1>
+                        <SideBarProfileText1>{displayName}</SideBarProfileText1>
                         <SideBarProfileText2>Driver</SideBarProfileText2>
                     </SideBarTextWrapper> 
                     </SideBarProfileWrapper>
@@ -116,9 +116,9 @@ const handleSidebarToggle = () => {
                     </SideBarProfileWrapper>
             </SidebarTitleWrapper>
             <SidebarMenu>
-            <SidebarTitleWrapper>
+                <SidebarTitleWrapper>
                         <SidebarTitle>Menu</SidebarTitle>
-                    </SidebarTitleWrapper>
+                </SidebarTitleWrapper>
                     <MenuItem to="/driver" iconSrc={Dashboard} iconAlt='dashboard' text='Dashboard' />
                     <MenuItem to="/driver/reports" iconSrc={File} iconAlt='file' text='Inspection Reports' />
                     <MenuItem to="/driver/trips" iconSrc={Folder} iconAlt='folder' text='Trip Summary' />
@@ -130,4 +130,4 @@ const handleSidebarToggle = () => {
     );
 };
 
-export default Sidebar;
+export default SidebarDriver;

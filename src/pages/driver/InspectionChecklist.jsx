@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react'
 import InspectionFieldInput from './inspectionLists/InspectionFieldInput';
 import InspectionFront from './inspectionLists/InspectionFront';
@@ -6,7 +7,23 @@ import InspectionBack from './inspectionLists/InspectionBack';
 import InspectionLeft from './inspectionLists/InspectionLeft';
 import InspectionInside from './inspectionLists/InspectionInside'
 import tw from 'tailwind-styled-components';
+import { useNavigate } from 'react-router-dom';
+import { InspectionAccess } from './inspectionLists/InspectionContext';
+
 const InspectionChecklist = () => {
+  const {damaged} = InspectionAccess();
+
+  const submitReport = () => {
+    if(damaged.length === 0) {
+      //TODO Dispatch
+    } else {
+      //TODO Submit Damaged Bus
+    }
+    navigate("/driver")
+  }
+
+
+  const navigate = useNavigate();
 
   
 
@@ -29,11 +46,13 @@ const InspectionChecklist = () => {
             <label htmlFor="remarksInput" className='text-base sm:text-lg md:text-xl lg:text-2xl'>Remarks</label>
             <input type="text" id="remarksInput" placeholder="Enter your remarks" className='remarkInputs focus:outline-none focus:border-fontColor w-full' required/>
           </div>
-          <button className='buttonTemplate self-stretch'>SUBMIT</button>
+          <button className='border outline-none buttonTemplate self-stretch' onClick={submitReport}>SUBMIT</button>
         </div>
       </div>
     </MainWrapper>
   )
 }
+
+
 
 export default InspectionChecklist 

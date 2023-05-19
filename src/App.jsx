@@ -13,6 +13,12 @@ import { AuthProvider } from './components/Auth/Auth';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
 import { InspectionProvider } from './pages/driver/inspectionLists/InspectionContext';
 import AdminDB from './pages/admin/AdminDB';
+import AdminDriver from './pages/admin/AdminDriver'
+import AdminMechanic from './pages/admin/AdminMechanic'
+import AdminBus from './pages/admin/AdminBus'
+import AdminRoute from './pages/admin/AdminRoute'
+import AdminReport from './pages/admin/AdminReports'
+import AdminTrips from './pages/admin/AdminTrips'
 
 
 function App() {
@@ -30,16 +36,24 @@ function App() {
           <Route path='reports' element={<DriverReports />} />
           <Route path='trips' element={<DriverTrips />} />
         </Route>
-        <Route path='passenger' element={<Passenger/>} />
         <Route path='inspection' element={<ProtectedRoute>
           <InspectionProvider>
           <Inspection/>
           </InspectionProvider>
-
-        </ProtectedRoute>} />
+        </ProtectedRoute>}/>
         <Route path='/mechanic/*' element= {<MechanicDB/>} />
-
-        <Route path='/admin/*' element= {<AdminDB/>} />
+        
+        <Route path='/admin/*' element= {<ProtectedRoute>
+        <AdminDB/>
+        </ProtectedRoute>}>
+          <Route index element={<AdminDriver/>}/>
+          <Route path ='mechanic' element={<AdminMechanic/>}/>
+          <Route path ='bus' element={<AdminBus/>}/>
+          <Route path ='route' element={<AdminRoute/>}/>
+          <Route path ='reports' element={<AdminReport/>}/>
+          <Route path ='trips' element={<AdminTrips/>}/>
+        </Route>
+        <Route path='passenger' element={<Passenger/>} />
 
       </Routes>
     </AuthProvider>

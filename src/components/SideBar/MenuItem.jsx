@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import tw from 'tailwind-styled-components';
 import PropTypes from "prop-types";
 import { Link, useLocation } from 'react-router-dom';
@@ -16,13 +16,21 @@ const SideBarMenuText = tw.h3`
 
     const SBMenuItem = ({ to, iconSrc, iconAlt, text }) => {
         const location = useLocation();
+        const [activeMenuItem, setActiveMenuItem] = useState(null);
+
+        const handleMenuItemClick = () => {
+            setActiveMenuItem(to);
+        }
+
         return (
-            <Link to={to} className={`${location.pathname === to}`}>
+            <Link to={to}  className={`${location.pathname === to || activeMenuItem === to ? 'bg-highlight/40' : ''}`}
+            onClick={handleMenuItemClick}>
             <SidebarMenuItem>
             <SideBarMenuIcon src={iconSrc} alt={iconAlt}/>
             <SideBarMenuText>{text}</SideBarMenuText>
         </SidebarMenuItem>
         </Link>
+        
         );
     };
 

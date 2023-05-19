@@ -13,7 +13,7 @@ export default {
     },
     extend: {
       width : {
-        "map" : "84vw"
+        "frame" : "84vw"
       },
       colors:{
         primary: '#642F84',
@@ -31,7 +31,7 @@ export default {
       boxShadow: {
         'rating': '0px 4px 4px rgba(0, 0, 0, 0.25)'
       }
-     
+    
     },
     fontFamily: {
       'inter': ['Inter', 'sans-serif'],

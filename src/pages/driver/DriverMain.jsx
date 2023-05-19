@@ -35,7 +35,7 @@ const DriverMain = () => {
 
   return (
     <MainWrapper>
-        <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true} zoomControl={false} className='fixed z-0 h-screen md:w-map sm:w-screen'>
+        <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true} zoomControl={false} className='fixed z-0 h-screen md:w-frame sm:w-screen'>
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>

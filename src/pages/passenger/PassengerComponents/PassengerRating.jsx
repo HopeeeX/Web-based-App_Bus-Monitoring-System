@@ -75,7 +75,7 @@ const PassengerRating = () => {
                 
                 <button
                     type="submit"
-                    className="px-4 py-2 lg:py-[10px] bg-primary/90 text-white font-semibold text-base md:text-lg lg:text-xl rounded-2xl hover:bg-primary w-2/3"
+                    className="border outline-none px-4 py-2 lg:py-[10px] bg-primary/90 text-white font-semibold text-base md:text-lg lg:text-xl rounded-2xl hover:bg-primary w-2/3"
                 >
                     Submit
                 </button>

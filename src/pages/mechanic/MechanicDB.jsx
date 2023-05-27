@@ -1,6 +1,7 @@
 import React from 'react';
 import tw from 'tailwind-styled-components'
 import SideBarMechanic from '../../components/SideBar/SideBarMechanic';
+import { Outlet } from 'react-router-dom';
 
 const Wrapper = tw.div`
     flex flex-cols`;
@@ -14,6 +15,7 @@ const MechanicDB = () => {
             <SidebarContainer>
                 <SideBarMechanic/>
             </SidebarContainer>
+            <Outlet/>
         </Wrapper>
     );
 }

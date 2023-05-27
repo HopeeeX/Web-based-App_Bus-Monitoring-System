@@ -1,21 +1,18 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import tw from 'tailwind-styled-components'
-import PropTypes from "prop-types";
 
 const Wrapper = tw.div`
-    mt-5 md:mt-8`;
+    mt-4 ml-12 md:mt-6`;
 
-const AddButton = ({text}) => {
+const AddButton = ({text, clickfunc}) => {
     return (  
         <Wrapper>
-        <button className='border outline-none bg-primary text-gray-100 font-inter rounded-full font-semibold w-[160px] h-[40px] hover:bg-purple-900'>
+        <button className='border outline-none bg-sidebar text-gray-100 tex-sm font-inter rounded-full font-semibold h-[40px] sm:w-[90px] md:w-[130px] lg:[200px] hover:bg-purple-800' onClick={clickfunc}>
             {text}
         </button>
         </Wrapper>
     );
 }
 
-AddButton.propTypes = {
-    text: PropTypes.string.isRequired,
-};
 export default AddButton;

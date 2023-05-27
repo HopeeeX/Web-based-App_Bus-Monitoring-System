@@ -15,24 +15,23 @@ const IconWrapper = tw.div`
 const Icon = tw.img`
     w-[24px] h-[24px]`;
 
-const SearchField = ({type, id, placeholder}) => {
+const SearchFieldUser = ({type, id, placeholder}) => {
     return (
         <Container>
-            <Wrapper>
-                <input className='border outline-none border-gray-400 rounded-xl px-12 py-2 h-10 w-full md:w-[470px] font-inter text-white/30 text-sm' type={type} id={id} placeholder={placeholder}/>
-            <IconWrapper>
-                <Icon src={Search} alt='search'/>
-            </IconWrapper>
-            </Wrapper>
-        </Container>
+        <Wrapper>
+            <input className='border outline-none border-gray-400 rounded-xl px-12 py-2 h-10 w-full md:w-[470px] font-inter text-white/30 text-sm' type={type} id={id} placeholder={placeholder}/>
+        <IconWrapper>
+            <Icon src={Search} alt='search'/>
+        </IconWrapper>
+        </Wrapper>
+    </Container>
     );
 }
 
-SearchField.propTypes = {
+SearchFieldUser.propTypes = {
     type: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     placeholder: PropTypes.string.isRequired,
 };
 
-
-export default SearchField;
+export default SearchFieldUser;

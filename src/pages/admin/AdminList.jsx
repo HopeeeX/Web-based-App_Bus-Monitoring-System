@@ -1,11 +1,10 @@
-/* eslint-disable react/prop-types */
 import React, {useState} from 'react';
 import tw from 'tailwind-styled-components'
 import AddButton from '../../components/Table/AddButton';
 import SearchFieldAdmin from '../../components/Table/SearchFieldAdmin';
 import Header from '../../components/Table/Header';
 import Row from '../../components/Table/RowAdmin';
-import AddUserModal from '../../components/Modals/AddUserModal'
+import AddUserModal from '../../components/Modals/AddUserModal';
 
 const Wrapper = tw.div`
     sm:w-full `;
@@ -19,12 +18,11 @@ const TableWrapper = tw.div`
 const TableContainer = tw.div`
     overflow-auto rounded-sm shadow`;
 
-const ModalWrapper = tw.div`
+    const ModalWrapper = tw.div`
     fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center`;
 
-const AdminDriver = ({onClose}) => {
+const AdminList = () => {
     const [showModal, setShowModal] = useState(false);
-    const [users, setUsers] = useState([]);
 
     const handleOpenModal = () => {
     setShowModal(true);
@@ -32,31 +30,25 @@ const AdminDriver = ({onClose}) => {
 
     const handleCloseModal = () => {
     setShowModal(false);
-    onClose();
-    };
-
-    const addUser = (user) => {
-        setUsers([...users, user]);
     };
 
     return (
         <Wrapper>
             <Container>
-                <AddButton text='Add User' clickfunc={handleOpenModal}/>
+                <AddButton text='Add User' clickfunc={handleOpenModal} />
                 {showModal && (
                     <ModalWrapper>
-                        <AddUserModal onClose={handleCloseModal} addUser={addUser}/>
+                        <AddUserModal onClose={handleCloseModal}/>
                     </ModalWrapper>
-                )
-                }
+                )}
                 <SearchFieldAdmin type='text' id='id' placeholder='Search Name'/>
             </Container>
             <TableWrapper>
                 <TableContainer>
                     <table className='w-full'>
-                        <Header text={['Name', 'User ID', 'Email Address', 'Mobile No.', 'License No.', '']}/>
+                        <Header text={['Name', 'User ID', 'Email Address','']}/>
                         <tbody className='divide-y divide-gray-200'>
-                            <Row text={['123', '123', '123', '123', '123']}/>
+                            <Row text={['123', '123', '123']}/>
                         </tbody>
                     </table>
                 </TableContainer>
@@ -65,4 +57,4 @@ const AdminDriver = ({onClose}) => {
     );
 }
 
-export default AdminDriver;
+export default AdminList;

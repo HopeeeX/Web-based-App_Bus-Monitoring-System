@@ -8,6 +8,8 @@ import DriverTrips from './pages/driver/DriverTrips';
 import Inspection from './pages/driver/InspectionChecklist';
 import Passenger from './pages/passenger/MainPageScreen';
 import MechanicDB from './pages/mechanic/MechanicDB';
+import MechanicApproved from './pages/mechanic/MechanicApproved'
+import MechanicUnapproved from './pages/mechanic/MechanicUnapproved'
 import { Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './components/Auth/Auth';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
@@ -19,6 +21,7 @@ import AdminBus from './pages/admin/AdminBus'
 import AdminRoute from './pages/admin/AdminRoute'
 import AdminReport from './pages/admin/AdminReports'
 import AdminTrips from './pages/admin/AdminTrips'
+import AdminList from './pages/admin/AdminList';
 
 
 function App() {
@@ -41,12 +44,18 @@ function App() {
           <Inspection/>
           </InspectionProvider>
         </ProtectedRoute>}/>
-        <Route path='/mechanic/*' element= {<MechanicDB/>} />
+
+        <Route path='/mechanic/*' element= {<ProtectedRoute>
+          <MechanicDB/> </ProtectedRoute>}> 
+        <Route index element={<MechanicApproved/>}/>
+        <Route path = 'unapproved' element = {<MechanicUnapproved/>}/>
+        </Route>
         
         <Route path='/admin/*' element= {<ProtectedRoute>
         <AdminDB/>
         </ProtectedRoute>}>
           <Route index element={<AdminDriver/>}/>
+          <Route path = 'list' element = {<AdminList/>}/>
           <Route path ='mechanic' element={<AdminMechanic/>}/>
           <Route path ='bus' element={<AdminBus/>}/>
           <Route path ='route' element={<AdminRoute/>}/>

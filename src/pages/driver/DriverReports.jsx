@@ -2,10 +2,10 @@ import React from 'react'
 import tw from 'tailwind-styled-components'
 import SearchField from '../../components/Table/SearchFieldUser'
 import Header from '../../components/Table/Header'
-import Row from '../../components/Table/Row'
+import Row from '../../components/Table/RowUser'
 
 const Wrapper = tw.div`
-  sm:w-full md:p-5 `;
+  sm:w-full `;
 
 const TableWrapper = tw.div`
   h-screen p-5 md:pl-44 md:pr-8 lg:pl-16`;
@@ -17,7 +17,7 @@ const DriverReports = () => {
 
   return (
   <Wrapper>
-    <SearchField type='number' id='number' placeholder='Search Bus Number'/>
+    <SearchField type='number' id='number' placeholder='Search Report ID'/>
     <TableWrapper>
         <TableContainer>
         <table className='w-full'>

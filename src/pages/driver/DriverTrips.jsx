@@ -2,7 +2,7 @@ import React from 'react';
 import tw from 'tailwind-styled-components'
 import SearchField from '../../components/Table/SearchFieldUser';
 import Header from '../../components/Table/Header';
-import Row from '../../components/Table/Row';
+import Row from '../../components/Table/RowUser';
 
 const Wrapper = tw.div`
   sm:w-full`;

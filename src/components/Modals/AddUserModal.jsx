@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import Eye from '../../assets/icons/Eye.png';
 import EyeOff from '../../assets/icons/EyeOff.png';
@@ -5,9 +6,10 @@ import User from '../../assets/icons/User.png';
 import Mail from '../../assets/icons/Mail.png';
 import Card from '../../assets/icons/Card.png';
 import PHFlag from '../../assets/icons/Philippines.png';
+import Close from '../../assets/icons/Close.png'
 import SuccessfullyCreated from './SuccessfullyCreated';
 
-const AddUserModal = ({ onClose }) => {
+const AddUserModal = ({onClose}) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
@@ -37,14 +39,23 @@ const AddUserModal = ({ onClose }) => {
     onClose();
   };
 
+  const handleCloseModal = () => {
+    onClose();
+  };
+
   if (showSuccess) {
     return <SuccessfullyCreated onClose={handleSuccessClose} />;
   }
 
   return (
-    <div className='bg-purple-900 p-7 rounded-2xl drop-shadow-lg items-center flex flex-col text-center w-5/6 md:w-4/5 lg:w-[800px]'>
-      <h2 className='text-2xl md:text-4xl lg:text-[40px] font-bold text-white font-worksans'>Add an Account</h2>
-      <p className='text-white/50 font-inter text-xs md:text-sm mb-3'>Fill up the information below:</p>
+    <div className='bg-primary pt-2 pb-8 pl-12 pr-12 rounded-2xl drop-shadow-lg items-center flex flex-col text-center w-5/6 md:w-4/5 lg:w-[800px]'>
+      <div>
+        <button onClick={handleCloseModal}>
+          <img src={Close} alt='close' className='w-[20px] h-[20px] absolute top-4 right-4 focus:outline-none'/>
+        </button>
+      </div>
+      <h2 className='text-2xl md:text-4xl lg:text-[40px] font-bold text-white font-work-sans'>Add an Account</h2>
+      <p className='text-white/50 font-inter text-xs md:text-sm mb-3 mt-3'>Fill up the information below</p>
       
       <form onSubmit={handleSubmit} className='w-full mt-4 flex flex-col md:grid md:grid-cols-2 gap-0 md:gap-3 text-start text-white font-inter'>
         <div className='flex flex-col mb-4'>
@@ -168,7 +179,7 @@ const AddUserModal = ({ onClose }) => {
         </div>
         <button
           type='submit'
-          className='bg-secondary place-self-center font-inter text-lg md:text-xl text-white px-4 py-2 mt-8 mb-4 text-center font-semibold rounded-2xl col-span-2 w-2/3'
+          className='bg-secondary place-self-center font-inter text-lg md:text-xl text-white px-4 py-2 mt-4 mb-2 text-center font-semibold rounded-2xl col-span-2 w-2/3'
         >
           Create
         </button>

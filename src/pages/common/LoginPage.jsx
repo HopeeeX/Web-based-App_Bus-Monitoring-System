@@ -11,13 +11,14 @@ import { UserAuth } from "../../components/Auth/Auth";
         const navigate = useNavigate();
         const [email, setEmail] = useState("");
         const [password, setPassword] = useState("");
+        const [errorMessage, setErrorMessage] = useState("");
 
         const handleSubmit = async (e) => {
             e.preventDefault();
             try{
                 await signIn(email, password);
             } catch(e){
-                console.log(e.message)
+                setErrorMessage(e.message);
             }
         }
 
@@ -55,11 +56,12 @@ import { UserAuth } from "../../components/Auth/Auth";
                     <input className='border outline-none border-gray-300 rounded-lg h-10 w-72 pl-4 bg-transparent text-white font-inter' type={isPasswordVisible ? 'text': 'password'} id='password' placeholder='Enter your password' value={password} onChange={(e) => setPassword(e.target.value)}/>
                     <img src={isPasswordVisible ? Eye : EyeOff} alt='eye' className='absolute right-3 top-2' style={{height: '24px', width: '24px', cursor: 'pointer'}} onClick={togglePasswordVisibility}/>
                     </div>
-                    <div className='mt-2 ml-auto text-sm text-left md:mr-5 text-purple-300'>
-                        <Link to="/forgot">Forgot your Password?</Link>
-                    </div>
+                    {errorMessage && <p className='bg-red-400 w-72 h-8 rounded-lg text-red-800 mt-3 pl-4 pt-1.5 text-sm'>{errorMessage}</p>}
                 </div>
                 <button type='submit' className='border outline-none bg-secondary text-white font-inter rounded-full px-4 py-2 mt-3 font-semibold hover:bg-gray-500 sm:ml-2.5 md:ml-8' style={{height: '40px', width: '280px'}}>Login</button>
+                <div className='text-center mt-6 md:mt-8 text-sm text-white'>
+                        <Link to="/forgot">Forgot your Password?</Link>
+                </div>
                     </form>
                 </div>
             </div>

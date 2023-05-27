@@ -46,9 +46,9 @@ const AdminMechanic = () => {
             <TableWrapper>
                 <TableContainer>
                     <table className='w-full'>
-                        <Header text={['Name', 'User ID', 'Email Address', 'Mobile No.', 'License No.', 'Status', '']}/>
+                        <Header text={['Name', 'User ID', 'Email Address', 'Mobile No.', 'License No.','']}/>
                         <tbody className='divide-y divide-gray-200'>
-                            <Row text={['124', '123', '123', '123', '123', '123']}/>
+                            <Row text={['124', '123', '123', '123', '123']}/>
                         </tbody>
                     </table>
                 </TableContainer>

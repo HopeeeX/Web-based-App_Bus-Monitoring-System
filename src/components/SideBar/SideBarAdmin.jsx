@@ -84,7 +84,7 @@ const handleSidebarToggle = () => {
                 <SidebarTitleWrapper>
                     <SidebarTitle>Menu</SidebarTitle>
                 </SidebarTitleWrapper>
-            {persona == "superadmin" && <MenuItem to='/admin/admin' iconSrc={List} iconAlt='list' text='Admin List'/>}
+            {persona == "superadmin" && <MenuItem to='/admin/list' iconSrc={List} iconAlt='list' text='Admin List'/>}
             <MenuItem to='/admin' iconSrc={List} iconAlt='list' text='Driver List'/>
             <MenuItem to='/admin/mechanic' iconSrc={List} iconAlt='list' text='Mechanic List'/>
             <MenuItem to='/admin/bus' iconSrc={Bus} iconAlt='bus' text='Bus List'/>
@@ -108,7 +108,7 @@ const handleSidebarToggle = () => {
             <SidebarTitleWrapper>
                 <SidebarTitle>Menu</SidebarTitle>
             </SidebarTitleWrapper>
-            {persona == "superadmin" && <MenuItem to='/admin/admin' iconSrc={List} iconAlt='list' text='Admin List'/>}
+            {persona == "superadmin" && <MenuItem to='/admin/list' iconSrc={List} iconAlt='list' text='Admin List'/>}
             <MenuItem to='/admin' iconSrc={List} iconAlt='list' text='Driver List'/>
             <MenuItem to='/admin/mechanic' iconSrc={List} iconAlt='list' text='Mechanic List'/>
             <MenuItem to='/admin/bus' iconSrc={Bus} iconAlt='bus' text='Bus List'/>

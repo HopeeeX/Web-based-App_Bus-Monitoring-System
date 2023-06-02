@@ -91,7 +91,8 @@ const handleSidebarToggle = () => {
                 <SidebarTitleWrapper>
                     <SidebarTitle>Menu</SidebarTitle>
                 </SidebarTitleWrapper>
-            <MenuItem to='/mechanic' iconSrc={Folder} iconAlt='folder' text='Approved Reports'/>
+            <MenuItem to='/mechanic' iconSrc={Folder} iconAlt='folder' text='Pending Reports'/>
+            <MenuItem to='/mechanic/approved' iconSrc={Folder} iconAlt='folder' text='Approved Reports'/>
             <MenuItem to='/mechanic/unapproved' iconSrc={Folder} iconAlt='folder' text='Unapproved Reports'/>
             <Logout/>
             </SidebarMenu>
@@ -114,7 +115,8 @@ const handleSidebarToggle = () => {
             <SidebarTitleWrapper>
                 <SidebarTitle>Menu</SidebarTitle>
             </SidebarTitleWrapper>
-            <MenuItem to='/mechanic' iconSrc={Folder} iconAlt='folder' text='Approved Reports'/>
+            <MenuItem to='/mechanic' iconSrc={Folder} iconAlt='folder' text='Pending Reports'/>
+            <MenuItem to='/mechanic/approved' iconSrc={Folder} iconAlt='folder' text='Approved Reports'/>
             <MenuItem to='/mechanic/unapproved' iconSrc={Folder} iconAlt='folder' text='Unapproved Reports'/>
             <Logout/>
         </SidebarMenu>

@@ -11,6 +11,7 @@ import { collection, doc, getDoc } from 'firebase/firestore';
 const MainPageScreen = () => {
   const { busID } = useParams();
   const [busData, setBusData] = useState(null);
+  const [shouldRenderBusLocation, setShouldRenderBusLocation] = useState(false);
 
   useEffect(() => {
     const fetchBusData = async () => {
@@ -18,7 +19,6 @@ const MainPageScreen = () => {
         const busDocRef = doc(firestore, 'buses', busID);
         const busSnapshot = await getDoc(busDocRef);
         if (busSnapshot.exists()) {
-          console.log(busSnapshot.data());
           setBusData(busSnapshot.data());
         } else {
           console.log('Bus document not found');
@@ -31,11 +31,19 @@ const MainPageScreen = () => {
     fetchBusData();
   }, [busID]);
 
+  useEffect(() => {
+    if (busData !== null) {
+      setShouldRenderBusLocation(true);
+    }
+  }, [busData]);
+
   return (
     <div className='w-full flex flex-col'>
       <PassengerNavBar />
       <PassengerHero />
-      <PassengerBusLocation busID={busID} busData={busData} />
+      {shouldRenderBusLocation && (
+        <PassengerBusLocation busID={busID} busData={busData} />
+      )}
       <PassengerRating />
       <PassengerFooter />
     </div>

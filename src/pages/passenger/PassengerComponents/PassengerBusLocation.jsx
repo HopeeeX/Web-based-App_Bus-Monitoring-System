@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
-import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 const PassengerBusLocation = ({busID, busData}) => {
   return (
     <div className='bg-passengerBusLocation flex flex-col gap-6 lg:flex-row font-inter px-3 lg:px-32 pt-10 pb-16 justify-between'>

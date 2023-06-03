@@ -23,6 +23,8 @@ import AdminReport from './pages/admin/AdminReports'
 import AdminTrips from './pages/admin/AdminTrips'
 import AdminList from './pages/admin/AdminList';
 import PassengerOnlyRoute from './components/Auth/PassengerOnlyRoute';
+import InspectionData from './pages/common/InspectionData';
+import MechanicPending from './pages/mechanic/MechanicPending';
 
 
 function App() {
@@ -46,8 +48,10 @@ function App() {
 
         <Route path='/mechanic/*' element= {<ProtectedRoute>
           <MechanicDB/> </ProtectedRoute>}> 
-        <Route index element={<MechanicApproved/>}/>
+        <Route index element={<MechanicPending/>}/>
+        <Route path = 'approved' element = {<MechanicApproved/>}/>
         <Route path = 'unapproved' element = {<MechanicUnapproved/>}/>
+        <Route path = 'viewInspection' element = {<InspectionData/>}/>
         </Route>
         
         <Route path='/admin/*' element= {<ProtectedRoute>

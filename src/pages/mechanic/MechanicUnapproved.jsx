@@ -8,7 +8,7 @@ const Wrapper = tw.div`
     sm:w-full `;
 
 const TableWrapper = tw.div`
-    -screen p-5 md:pl-44 md:pr-8 lg:pl-16`;
+    h-screen p-5 md:pl-44 md:pr-8 lg:pl-16`;
 
 const TableContainer = tw.div`
     overflow-auto rounded-sm shadow`;

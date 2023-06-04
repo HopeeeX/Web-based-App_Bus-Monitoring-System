@@ -22,6 +22,7 @@ import AdminRoute from './pages/admin/AdminRoute'
 import AdminReport from './pages/admin/AdminReports'
 import AdminTrips from './pages/admin/AdminTrips'
 import AdminList from './pages/admin/AdminList';
+import PassengerOnlyRoute from './components/Auth/PassengerOnlyRoute';
 import InspectionData from './pages/common/InspectionData';
 import MechanicPending from './pages/mechanic/MechanicPending';
 
@@ -32,8 +33,6 @@ function App() {
       <Routes>
         <Route path='/' element={<LoginPage />}/>
         <Route path='/forgot' element={<ForgotPassword />} />
-        {/* <Route path='/driver/*' element={<DriverDB />}> */}
-          {/*Protected Route when Auth is Enabled*/}
         <Route path='/driver/*' element={<ProtectedRoute>
           <DriverDB />
         </ProtectedRoute>}>
@@ -66,7 +65,10 @@ function App() {
           <Route path ='reports' element={<AdminReport/>}/>
           <Route path ='trips' element={<AdminTrips/>}/>
         </Route>
-        <Route path='passenger' element={<Passenger/>} />
+        <Route path=':busID' element={<PassengerOnlyRoute>
+          <Passenger/>
+        </PassengerOnlyRoute>
+          } />
 
       </Routes>
     </AuthProvider>

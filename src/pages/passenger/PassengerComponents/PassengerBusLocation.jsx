@@ -1,6 +1,7 @@
+/* eslint-disable react/prop-types */
 import React from 'react'
-import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet'
-const PassengerBusLocation = () => {
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+const PassengerBusLocation = ({busID, busData}) => {
   return (
     <div className='bg-passengerBusLocation flex flex-col gap-6 lg:flex-row font-inter px-3 lg:px-32 pt-10 pb-16 justify-between'>
         <div className='flex flex-col gap-4'>
@@ -21,12 +22,12 @@ const PassengerBusLocation = () => {
         <div className='flex flex-col gap-3 lg:gap-6 xl:gap-8 text-white text-lg lg:text-xl xl:text-2xl justify-center'>
            <div className='bg-primary/60 px-14 lg:px-18 xl:px-20 py-4 lg:py-6 xl:py-8 rounded-xl text-center'>
                 <h4 className='font-bold lg:mb-3 xl:mb-5'>Bus Details</h4>
-                <h4 className='font-medium lg:mb-3 xl:mb-5'>Bus Number: 00001</h4>
-                <h4 className='font-medium'>Plate Number: ABC1234</h4>
+                <h4 className='font-medium lg:mb-3 xl:mb-5'>Bus Number: {busID}</h4>
+                <h4 className='font-medium'>Plate Number: {busData.plate}</h4>
            </div>
            <div className='bg-primary/60 px-14 lg:px-18 xl:px-20 py-4 lg:py-6 xl:py-8 rounded-xl text-center'>
                 <h4 className='font-bold lg:mb-3 xl:mb-5'>Driver Details</h4>
-                <h4 className='font-medium'>Driver Name: Kyle Mabuna</h4>
+                <h4 className='font-medium'>Driver Name: {busData.driver}</h4>
            </div>
         </div>
     </div>

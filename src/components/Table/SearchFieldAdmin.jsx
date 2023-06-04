@@ -19,7 +19,7 @@ const SearchFieldAdmin = ({type, id, placeholder}) => {
     return (
         <Container>
             <Wrapper>
-                <input className='border outline-none border-gray-400 rounded-xl px-12 py-2 h-10 w-full md:w-[350px] lg:w-[480px] font-inter text-white/30 text-sm' type={type} id={id} placeholder={placeholder}/>
+                <input className='border outline-none border-gray-400 rounded-xl px-12 py-2 h-10 w-full md:w-[350px] lg:w-[480px] font-inter text-black text-sm' type={type} id={id} placeholder={placeholder}/>
             <IconWrapper>
                 <Icon src={Search} alt='search'/>
             </IconWrapper>

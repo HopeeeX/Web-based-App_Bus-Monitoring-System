@@ -7,7 +7,7 @@ const Wrapper = tw.div`
     flex flex-cols`;
 
 const SidebarContainer = tw.div`
-    md:w-64 sm:w-0`;
+absolute md:w-64 sm:w-auto`;
 
 const AdminDB = () => {
     return (

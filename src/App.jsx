@@ -51,7 +51,7 @@ function App() {
         <Route index element={<MechanicPending/>}/>
         <Route path = 'approved' element = {<MechanicApproved/>}/>
         <Route path = 'unapproved' element = {<MechanicUnapproved/>}/>
-        <Route path = 'viewInspection' element = {<InspectionData/>}/>
+        <Route path = 'viewInspection/:reportID' element = {<InspectionData/>}/>
         </Route>
         
         <Route path='/admin/*' element= {<ProtectedRoute>

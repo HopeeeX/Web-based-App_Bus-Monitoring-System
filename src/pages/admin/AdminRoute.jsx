@@ -1,11 +1,13 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
-import tw from 'tailwind-styled-components';
-import AddButton from '../../components/Table/AddButton';
-import SearchFieldAdmin from '../../components/Table/SearchFieldAdmin';
-import Header from '../../components/Table/Header';
-import Row from '../../components/Table/RowAdmin';
-import AddRoute from '../../components/Modals/AddRoute';
+import React, { useState, useEffect } from "react";
+import tw from "tailwind-styled-components";
+import AddButton from "../../components/Table/AddButton";
+import SearchFieldAdmin from "../../components/Table/SearchFieldAdmin";
+import Header from "../../components/Table/Header";
+import Row from "../../components/Table/RowAdmin";
+import AddRoute from "../../components/Modals/AddRoute";
+import { collection, getDocs } from "firebase/firestore";
+import { firestore } from "../../../firebase";
 
 const Wrapper = tw.div`
   lg:ml-[220px] md:ml-[105px] sm:w-full  
@@ -29,7 +31,9 @@ const ModalWrapper = tw.div`
 
 const AdminRoute = ({ onClose }) => {
   const [showModal, setShowModal] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [routes, setRoutes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -40,24 +44,38 @@ const AdminRoute = ({ onClose }) => {
     onClose();
   };
 
-  // Sample routes array with placeholder values
-  const routes = [
-    {
-      id: 1,
-      number: '123',
-      origin: 'Origin 1',
-      destination: 'Destination 1',
-    },
-    {
-      id: 2,
-      number: '456',
-      origin: 'Origin 2',
-      destination: 'Destination 2',
-    },
-    // Add more sample routes as needed
-  ];
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
 
-  // Filter the routes based on the search query
+  useEffect(() => {
+    const fetchRoutes = async () => {
+      try {
+        // Check if routes are already in local state (cached)
+        if (routes.length > 0) {
+          setLoading(false);
+          return;
+        }
+
+        // Fetch routes from Firestore and update local state
+        const routesCollection = collection(firestore, "routes");
+        const querySnapshot = await getDocs(routesCollection);
+        const fetchedRoutes = [];
+        querySnapshot.forEach((doc) => {
+          const routeData = { ...doc.data(), id: doc.id };
+          fetchedRoutes.push(routeData);
+        });
+        setRoutes(fetchedRoutes);
+        setLoading(false);
+      } catch (error) {
+        console.log("Error fetching routes:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchRoutes();
+  }, [routes]);
+
   const filteredRoutes = routes.filter((route) =>
     route.number.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -75,19 +93,28 @@ const AdminRoute = ({ onClose }) => {
           type="text"
           id="id"
           placeholder="Search Route Number"
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={handleSearchChange}
         />
       </Container>
       <TableWrapper>
         <TableContainer>
-          <table className="w-full">
-            <Header text={['Route Number', 'Origin', 'Destination', '']} />
-            <tbody className="divide-y divide-gray-200">
-              {filteredRoutes.map((route) => (
-                <Row key={route.id} text={[route.number, route.origin, route.destination]} />
-              ))}
-            </tbody>
-          </table>
+          {loading ? (
+            <tr>
+              <td colSpan="4">Loading...</td>
+            </tr>
+          ) : (
+            <table className="w-full">
+              <Header text={["Route Number", "Origin", "Destination", ""]} />
+              <tbody className="divide-y divide-gray-200">
+                {filteredRoutes.map((route) => (
+                  <Row
+                    key={route.id}
+                    text={[route.number, route.origin, route.destination]}
+                  />
+                ))}{" "}
+              </tbody>
+            </table>
+          )}
         </TableContainer>
       </TableWrapper>
     </Wrapper>

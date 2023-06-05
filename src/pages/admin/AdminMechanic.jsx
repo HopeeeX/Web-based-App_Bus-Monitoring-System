@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import tw from 'tailwind-styled-components';
-import AddButton from '../../components/Table/AddButton';
-import SearchFieldAdmin from '../../components/Table/SearchFieldAdmin';
-import Header from '../../components/Table/Header';
-import Row from '../../components/Table/RowAdmin';
-import AddUserModal from '../../components/Modals/AddUserModal';
-import { collection, getDocs } from 'firebase/firestore';
-import { firestore } from '../../../firebase';
+import React, { useState, useEffect } from "react";
+import tw from "tailwind-styled-components";
+import AddButton from "../../components/Table/AddButton";
+import SearchFieldAdmin from "../../components/Table/SearchFieldAdmin";
+import Header from "../../components/Table/Header";
+import Row from "../../components/Table/RowAdmin";
+import AddUserModal from "../../components/Modals/AddUserModal";
+import { collection, getDocs } from "firebase/firestore";
+import { firestore } from "../../../firebase";
 
 const Wrapper = tw.div`
   lg:ml-[220px] md:ml-[105px] sm:w-full
@@ -30,7 +30,7 @@ const ModalWrapper = tw.div`
 
 const AdminMechanic = () => {
   const [showModal, setShowModal] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -42,7 +42,7 @@ const AdminMechanic = () => {
     setShowModal(false);
   };
 
-  const handleSearchChange = event => {
+  const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
@@ -56,17 +56,17 @@ const AdminMechanic = () => {
         }
 
         // Fetch mechanics from Firestore and update local state
-        const mechanicsCollection = collection(firestore, 'mechanics');
+        const mechanicsCollection = collection(firestore, "mechanics");
         const querySnapshot = await getDocs(mechanicsCollection);
         const fetchedMechanics = [];
-        querySnapshot.forEach(doc => {
+        querySnapshot.forEach((doc) => {
           const mechanicData = { ...doc.data(), userId: doc.id };
           fetchedMechanics.push(mechanicData);
         });
         setRows(fetchedMechanics);
         setLoading(false);
       } catch (error) {
-        console.log('Error fetching mechanics:', error);
+        console.log("Error fetching mechanics:", error);
         setLoading(false);
       }
     };
@@ -74,39 +74,44 @@ const AdminMechanic = () => {
     fetchMechanics();
   }, [rows]);
 
-  const filteredRows = rows.filter(row =>
+  const filteredRows = rows.filter((row) =>
     row.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <Wrapper>
       <Container>
-        <AddButton text='Add User' clickfunc={handleOpenModal} />
+        <AddButton text="Add User" clickfunc={handleOpenModal} />
         {showModal && (
           <ModalWrapper>
             <AddUserModal onClose={handleCloseModal} />
           </ModalWrapper>
         )}
         <SearchFieldAdmin
-          type='text'
-          id='id'
-          placeholder='Search Name'
+          type="text"
+          id="id"
+          placeholder="Search Name"
           onChange={handleSearchChange}
         />
       </Container>
       <TableWrapper>
         <TableContainer>
-          <table className='w-full'>
-            <Header
-              text={['Name', 'User ID', 'Email Address', 'Mobile No.', 'License No.', '']}
-            />
-            <tbody className='divide-y divide-gray-200'>
-              {loading ? (
-                <tr>
-                  <td colSpan='6'>Loading...</td>
-                </tr>
-              ) : (
-                filteredRows.map(row => (
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <table className="w-full">
+              <Header
+                text={[
+                  "Name",
+                  "User ID",
+                  "Email Address",
+                  "Mobile No.",
+                  "License No.",
+                  "",
+                ]}
+              />
+              <tbody className="divide-y divide-gray-200">
+                {filteredRows.map((row) => (
                   <Row
                     key={row.userId}
                     text={[
@@ -117,10 +122,10 @@ const AdminMechanic = () => {
                       row.license,
                     ]}
                   />
-                ))
-              )}
-            </tbody>
-          </table>
+                ))}
+              </tbody>
+            </table>
+          )}
         </TableContainer>
       </TableWrapper>
     </Wrapper>

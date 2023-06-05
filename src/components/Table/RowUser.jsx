@@ -9,8 +9,9 @@ const RowUser = ({text}) => {
             {text.map((row, index) => {
                 if(row.includes("link=")){
                     row = row.replace("link=","");
+                    const path = "/mechanic/viewInspection/" + row;
                     return (<td key={index}className='p-3 text-sm text-gray-600 font-inter font-semibold text-center'>
-                        <Link className='underline text-blue-400' to="/mechanic/viewInspection">{row}</Link>
+                        <Link className='underline text-blue-400' to={path}>{row}</Link>
                         
                     </td>)
                 }

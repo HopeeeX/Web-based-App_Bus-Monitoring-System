@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
+import { collection, getDocs } from 'firebase/firestore';
+import { firestore } from '../../../firebase';
 import AddButton from '../../components/Table/AddButton';
 import SearchFieldAdmin from '../../components/Table/SearchFieldAdmin';
 import Header from '../../components/Table/Header';
@@ -29,12 +31,35 @@ const ModalWrapper = tw.div`
 
 const AdminDriver = ({ onClose }) => {
   const [showModal, setShowModal] = useState(false);
-  const [users, setUsers] = useState([
-    { id: 1, name: 'John Doe', userId: 'johndoe123', emailAddress: 'johndoe@example.com', mobileNo: '1234567890', licenseNo: 'ABCD1234' },
-    { id: 2, name: 'Jane Smith', userId: 'janesmith456', emailAddress: 'janesmith@example.com', mobileNo: '9876543210', licenseNo: 'WXYZ5678' },
-    // Add more user objects as needed
-  ]);
+  const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        // Check if users are already in local state (cached)
+        if (users.length > 0) {
+          setLoading(false);
+          return;
+        }
+
+        // Fetch users from Firestore and update local state
+        const querySnapshot = await getDocs(collection(firestore, 'drivers'));
+        const userData = querySnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          userId: doc.id, // Use document ID as the user.userID
+        }));
+        setUsers(userData);
+        setLoading(false);
+      } catch (error) {
+        console.log('Error fetching users:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, [users]);
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -75,20 +100,22 @@ const AdminDriver = ({ onClose }) => {
       </Container>
       <TableWrapper>
         <TableContainer>
-          <table className="w-full">
-            <Header
-              text={[
-                'Name',
-                'User ID',
-                'Email Address',
-                'Mobile No.',
-                'License No.',
-                '',
-              ]}
-            />
-            <tbody className="divide-y divide-gray-200">
-              {users.map((user) => (
-                user.name.toLowerCase().includes(searchTerm.toLowerCase()) && (
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <table className="w-full">
+              <Header
+                text={[
+                  'Name',
+                  'User ID',
+                  'Email Address',
+                  'Mobile No.',
+                  'License No.',
+                  '',
+                ]}
+              />
+              <tbody className="divide-y divide-gray-200">
+                {filteredUsers.map((user) => (
                   <Row
                     key={user.id}
                     text={[
@@ -99,10 +126,10 @@ const AdminDriver = ({ onClose }) => {
                       user.licenseNo,
                     ]}
                   />
-                )
-              ))}
-            </tbody>
-          </table>
+                ))}
+              </tbody>
+            </table>
+          )}
         </TableContainer>
       </TableWrapper>
     </Wrapper>

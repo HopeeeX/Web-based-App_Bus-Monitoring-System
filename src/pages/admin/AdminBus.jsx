@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import AddButton from '../../components/Table/AddButton';
 import SearchFieldAdmin from '../../components/Table/SearchFieldAdmin';
 import Header from '../../components/Table/Header';
 import Row from '../../components/Table/RowAdmin';
 import AddBus from '../../components/Modals/AddBus';
+import { collection, getDocs } from 'firebase/firestore';
+import { firestore } from '../../../firebase';
 
 const Wrapper = tw.div`
   lg:ml-[220px] md:ml-[105px] sm:w-full
@@ -29,6 +31,36 @@ const ModalWrapper = tw.div`
 const AdminBus = () => {
   const [showModal, setShowModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    const fetchBuses = async () => {
+      try {
+        // Check if buses are already in local state (cached)
+        if (rows.length > 0) {
+          setLoading(false);
+          return;
+        }
+  
+        // Fetch buses from Firestore and update local state
+        const busesCollection = collection(firestore, 'buses');
+        const querySnapshot = await getDocs(busesCollection);
+        const fetchedBuses = [];
+        querySnapshot.forEach((doc) => {
+          const busData = doc.data();
+          fetchedBuses.push(busData);
+        });
+        setRows(fetchedBuses);
+        setLoading(false);
+      } catch (error) {
+        console.log('Error fetching buses:', error);
+        setLoading(false);
+      }
+    };
+  
+    fetchBuses();
+  }, [rows]);
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -38,18 +70,11 @@ const AdminBus = () => {
     setShowModal(false);
   };
 
-  const handleSearchChange = event => {
+  const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
-  // Placeholder data for table rows
-  const rows = [
-    { id: 1, plateNumber: 'ABC123', brand: 'Toyota', sittingCapacity: '4' },
-    { id: 2, plateNumber: 'DEF456', brand: 'Honda', sittingCapacity: '6' },
-    { id: 3, plateNumber: 'GHI789', brand: 'Ford', sittingCapacity: '5' },
-  ];
-
-  const filteredRows = rows.filter(row =>
+  const filteredRows = rows.filter((row) =>
     row.plateNumber.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -71,17 +96,21 @@ const AdminBus = () => {
       </Container>
       <TableWrapper>
         <TableContainer>
-          <table className='w-full'>
-            <Header text={['Plate Number', 'Brand', 'Sitting Capacity', '']} />
-            <tbody className='divide-y divide-gray-200'>
-              {filteredRows.map(row => (
-                <Row
-                  key={row.id}
-                  text={[row.plateNumber, row.brand, row.sittingCapacity]}
-                />
-              ))}
-            </tbody>
-          </table>
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <table className='w-full'>
+              <Header text={['Plate Number', 'Brand', 'Sitting Capacity', '']} />
+              <tbody className='divide-y divide-gray-200'>
+                {filteredRows.map((row) => (
+                  <Row
+                    key={row.plateNumber}
+                    text={[row.plateNumber, row.brand, row.sittingCapacity]}
+                  />
+                ))}
+              </tbody>
+            </table>
+          )}
         </TableContainer>
       </TableWrapper>
     </Wrapper>

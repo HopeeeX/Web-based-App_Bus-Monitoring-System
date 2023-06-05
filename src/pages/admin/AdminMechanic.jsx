@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import AddButton from '../../components/Table/AddButton';
 import SearchFieldAdmin from '../../components/Table/SearchFieldAdmin';
 import Header from '../../components/Table/Header';
 import Row from '../../components/Table/RowAdmin';
 import AddUserModal from '../../components/Modals/AddUserModal';
+import { collection, getDocs } from 'firebase/firestore';
+import { firestore } from '../../../firebase';
 
 const Wrapper = tw.div`
   lg:ml-[220px] md:ml-[105px] sm:w-full
@@ -29,6 +31,8 @@ const ModalWrapper = tw.div`
 const AdminMechanic = () => {
   const [showModal, setShowModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -42,25 +46,33 @@ const AdminMechanic = () => {
     setSearchQuery(event.target.value);
   };
 
-  // Placeholder data for table rows
-  const rows = [
-    {
-      id: 1,
-      name: 'John Doe',
-      userId: '123',
-      email: 'john@example.com',
-      mobileNo: '1234567890',
-      licenseNo: 'ABCD1234',
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      userId: '456',
-      email: 'jane@example.com',
-      mobileNo: '9876543210',
-      licenseNo: 'EFGH5678',
-    },
-  ];
+  useEffect(() => {
+    const fetchMechanics = async () => {
+      try {
+        // Check if mechanics are already in local state (cached)
+        if (rows.length > 0) {
+          setLoading(false);
+          return;
+        }
+
+        // Fetch mechanics from Firestore and update local state
+        const mechanicsCollection = collection(firestore, 'mechanics');
+        const querySnapshot = await getDocs(mechanicsCollection);
+        const fetchedMechanics = [];
+        querySnapshot.forEach(doc => {
+          const mechanicData = { ...doc.data(), userId: doc.id };
+          fetchedMechanics.push(mechanicData);
+        });
+        setRows(fetchedMechanics);
+        setLoading(false);
+      } catch (error) {
+        console.log('Error fetching mechanics:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchMechanics();
+  }, [rows]);
 
   const filteredRows = rows.filter(row =>
     row.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -89,18 +101,24 @@ const AdminMechanic = () => {
               text={['Name', 'User ID', 'Email Address', 'Mobile No.', 'License No.', '']}
             />
             <tbody className='divide-y divide-gray-200'>
-              {filteredRows.map(row => (
-                <Row
-                  key={row.id}
-                  text={[
-                    row.name,
-                    row.userId,
-                    row.email,
-                    row.mobileNo,
-                    row.licenseNo,
-                  ]}
-                />
-              ))}
+              {loading ? (
+                <tr>
+                  <td colSpan='6'>Loading...</td>
+                </tr>
+              ) : (
+                filteredRows.map(row => (
+                  <Row
+                    key={row.userId}
+                    text={[
+                      row.name,
+                      row.userId,
+                      row.email,
+                      row.phone,
+                      row.license,
+                    ]}
+                  />
+                ))
+              )}
             </tbody>
           </table>
         </TableContainer>

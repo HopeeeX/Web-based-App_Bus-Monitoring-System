@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import SearchFieldUser from '../../components/Table/SearchFieldUser';
 import Header from '../../components/Table/Header';
-import Row from '../../components/Table/RowUser';
-import { collection, getDocs } from 'firebase/firestore';
+import RowUser from '../../components/Table/RowUser';
+import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { firestore } from '../../../firebase';
 
 const Wrapper = tw.div`
@@ -27,6 +27,10 @@ const MechanicPending = () => {
     setSearchTerm(event.target.value);
   };
 
+  const removeReportFromView = (reportId) => {
+    setReports((prevReports) => prevReports.filter((report) => report.id !== reportId));
+  };
+
   useEffect(() => {
     const fetchReports = async () => {
       try {
@@ -44,9 +48,20 @@ const MechanicPending = () => {
         setLoading(false);
       }
     };
-  
+
     fetchReports();
   }, []);
+
+  const handleStatusChange = async (reportId, newStatus) => {
+    try {
+      const reportRef = doc(firestore, 'inspection_reports', reportId);
+      await updateDoc(reportRef, { status: newStatus });
+      console.log('Status updated successfully!');
+      removeReportFromView(reportId);
+    } catch (error) {
+      console.log('Error updating status:', error);
+    }
+  };
 
   // Filter reports based on the search term
   const filteredReports = reports.filter((report) =>
@@ -70,14 +85,16 @@ const MechanicPending = () => {
               <Header text={['Bus Number', 'Report ID', 'Date Submitted', 'Status']} />
               <tbody className='divide-y divide-gray-200'>
                 {filteredReports.map((report) => (
-                  <Row
+                  <RowUser
                     key={report.id}
                     text={[
                       report.bus,
                       'link=' + report.id,
                       report.date + ' ' + report.time,
-                      "status=" + report.status,
+                      'status=' + report.status,
                     ]}
+                    reportId={report.id} // Pass the reportId prop
+                    onStatusChange={handleStatusChange} // Pass the onStatusChange callback
                   />
                 ))}
               </tbody>

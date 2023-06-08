@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useRef} from 'react';
+import React, { useEffect, useRef } from 'react';
 
 function cut(str, cutStart, cutEnd) {
   return str.substr(0, cutStart) + str.substr(cutEnd + 1);
 }
 
-const InspectionFieldInput = ({ busIdError, handleBusIdChange, busId }) => {
-  const busIdInputRef = useRef(null); // Create a ref for the busId input field
+const InspectionFieldInput = ({ busIdError, handleBusIdChange, busId, setDate, setTime }) => {
+  const busIdInputRef = useRef(null);
 
   useEffect(() => {
     var date = new Date();
@@ -18,11 +18,19 @@ const InspectionFieldInput = ({ busIdError, handleBusIdChange, busId }) => {
     const datestr = date.toTimeString().slice(0, 8);
     document.getElementById('timeInput').value = cut(datestr, 5, 8);
 
-    busIdInputRef.current.focus(); // Set focus on the busId input field
+    busIdInputRef.current.focus();
   }, []);
 
+  const handleDateChange = (e) => {
+    setDate(e.target.value);
+  };
+
+  const handleTimeChange = (e) => {
+    setTime(e.target.value);
+  };
+
   return (
-    <div className="flex flex-col md:flex-row  justify-between w-full px-4 md:px-16 xl:px-32 font-inter font-semibold text-fontColor text-sm md:text-base mb-7 md:mb-11 lg:mb-16">
+    <div className="flex flex-col md:flex-row justify-between w-full px-4 md:px-16 xl:px-32 font-inter font-semibold text-fontColor text-sm md:text-base mb-7 md:mb-11 lg:mb-16">
       <div className="flex flex-col md:mb-3">
         <label htmlFor="busIdInput">Bus ID</label>
         <input
@@ -33,7 +41,7 @@ const InspectionFieldInput = ({ busIdError, handleBusIdChange, busId }) => {
           required
           value={busId}
           onChange={handleBusIdChange}
-          ref={busIdInputRef} // Assign the ref to the input field
+          ref={busIdInputRef}
         />
         {busIdError && <span className="text-red-500">{busIdError}</span>}
       </div>
@@ -46,6 +54,7 @@ const InspectionFieldInput = ({ busIdError, handleBusIdChange, busId }) => {
             className="inspectionInputs"
             readOnly="readonly"
             required
+            onChange={handleDateChange}
           />
         </div>
         <div className="flex flex-col md:mb-3">
@@ -56,6 +65,7 @@ const InspectionFieldInput = ({ busIdError, handleBusIdChange, busId }) => {
             className="inspectionInputs"
             readOnly="readonly"
             required
+            onChange={handleTimeChange}
           />
         </div>
       </div>

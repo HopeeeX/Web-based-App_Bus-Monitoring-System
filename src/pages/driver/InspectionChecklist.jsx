@@ -15,7 +15,8 @@ const InspectionChecklist = () => {
   const { damaged } = InspectionAccess();
   const [busIdError, setBusIdError] = useState('');
   const [busId, setBusId] = useState('');
-  console.log(busIdError)
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
 
   const handleBusIdChange = (e) => {
     setBusId(e.target.value);
@@ -37,7 +38,6 @@ const InspectionChecklist = () => {
     navigate('/driver');
   };
   
-
   const navigate = useNavigate();
 
   const validateBusId = async (busId) => {
@@ -58,12 +58,19 @@ const InspectionChecklist = () => {
   const MainWrapper = tw.div`
     flex flex-col justify-center items-center font-inter bg-[#F3F3F3] pb-14 md:pb-40 lg:pb-52
   `;
+
   return (
     <MainWrapper>
       <h1 className='w-full font-semibold text-center text-inspectionTitle  text-2xl sm:text-3xl md:text-4xl lg:text-[40px] border-b-2 pt-8 pb-6 border-secondary mb-8'>
         360-Degree Inspection Form
       </h1>
-      <InspectionFieldInput busIdError={busIdError} handleBusIdChange={handleBusIdChange} busId={busId}/>
+      <InspectionFieldInput
+        busIdError={busIdError}
+        handleBusIdChange={handleBusIdChange}
+        busId={busId}
+        setDate={setDate}
+        setTime={setTime}
+      />
       <div className='flex flex-col items-center gap-5 lg:gap-12'>
         <InspectionFront />
         <InspectionRight />

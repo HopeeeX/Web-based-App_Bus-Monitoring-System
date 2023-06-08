@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import SearchFieldAdmin from '../../components/Table/SearchFieldAdmin';
 import Header from '../../components/Table/Header';
 import Row from '../../components/Table/RowAdmin';
+import { collection, getDocs } from 'firebase/firestore';
+import { firestore } from '../../../firebase';
 
 const Wrapper = tw.div`
   lg:ml-[220px] md:ml-[105px] sm:w-full  
@@ -22,29 +24,28 @@ const TableContainer = tw.div`
 
 const AdminReports = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [reports, setReports] = useState([]);
 
-  // Sample reports array with placeholder values
-  const reports = [
-    {
-      id: '1',
-      busNumber: 'Bus 1',
-      reportId: '123',
-      dateSubmitted: '2023-06-01',
-      status: 'Pending',
-    },
-    {
-      id: '2',
-      busNumber: 'Bus 2',
-      reportId: '456',
-      dateSubmitted: '2023-06-02',
-      status: 'Approved',
-    },
-    // Add more sample reports as needed
-  ];
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      const querySnapshot = await getDocs(collection(firestore, 'inspection_reports'));
+      const fetchedReports = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setReports(fetchedReports);
+    };
+
+    fetchReports();
+  }, []);
 
   // Filter the reports based on the search query
   const filteredReports = reports.filter((report) =>
-    report.reportId.toLowerCase().includes(searchQuery.toLowerCase())
+    report.id.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -54,7 +55,7 @@ const AdminReports = () => {
           type="text"
           id="id"
           placeholder="Search Report ID"
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={handleSearchChange}
         />
       </Container>
       <TableWrapper>
@@ -68,10 +69,10 @@ const AdminReports = () => {
                 <Row
                   key={report.id}
                   text={[
-                    report.busNumber,
-                    report.reportId,
-                    report.dateSubmitted,
-                    report.status,
+                    report.bus,
+                    "link=" + report.id,
+                    report.date + " " + report.time,
+                    "status=" + report.status,
                   ]}
                 />
               ))}

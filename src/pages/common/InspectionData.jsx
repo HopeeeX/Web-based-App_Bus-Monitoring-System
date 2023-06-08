@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 
 const  Wrapper = tw.div`
-    w-full md:w-3/5 sm:mx-auto md:mx-auto lg:mx-auto sm:mt-16 sm:mr-5 sm:ml-5 pb-10 rounded-lg shadow-lg`;
+    w-full md:w-3/5 sm:mx-auto md:mx-auto lg:ml-[300px] sm:mt-16 sm:mr-5 sm:ml-5 pb-10 rounded-lg shadow-lg`;
 
 const Header = tw.div`
     flex gap-2 mb-3 p-5 border-b-2`;

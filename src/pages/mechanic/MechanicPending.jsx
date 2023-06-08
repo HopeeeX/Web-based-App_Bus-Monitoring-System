@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import SearchFieldUser from '../../components/Table/SearchFieldUser';
 import Header from '../../components/Table/Header';
 import Row from '../../components/Table/RowUser';
+import { collection, getDocs } from 'firebase/firestore';
+import { firestore } from '../../../firebase';
 
 const Wrapper = tw.div`
   lg:ml-[220px] md:ml-[105px] sm:w-full
@@ -18,20 +20,37 @@ const TableContainer = tw.div`
 
 const MechanicPending = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  // Filter rows based on the search term
-  const filteredRows = [
-    { text: ['123', 'link=000001', 'christinehopemedalla', 'christinehopemedalla'] },
-    { text: ['123', 'link=000002', 'christinehopemedalla', 'christinehopemedalla'] },
-    { text: ['123', 'link=000003', 'christinehopemedalla', 'christinehopemedalla'] },
-  ].filter((row) =>
-    row.text.some((cell) =>
-      cell.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(firestore, 'inspection_reports'));
+        const fetchedReports = querySnapshot.docs
+          .map((doc) => ({
+            id: doc.id,
+            ...doc.data()
+          }))
+          .filter((report) => report.status === 'Pending');
+        setReports(fetchedReports);
+        setLoading(false);
+      } catch (error) {
+        console.log('Error fetching reports:', error);
+        setLoading(false);
+      }
+    };
+  
+    fetchReports();
+  }, []);
+
+  // Filter reports based on the search term
+  const filteredReports = reports.filter((report) =>
+    report.id.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -44,14 +63,26 @@ const MechanicPending = () => {
       />
       <TableWrapper>
         <TableContainer>
-          <table className='w-full'>
-            <Header text={['Bus Number', 'Report ID', 'Date Submitted', 'Status']} />
-            <tbody className='divide-y divide-gray-200'>
-              {filteredRows.map((row, index) => (
-                <Row key={index} text={row.text} />
-              ))}
-            </tbody>
-          </table>
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
+            <table className='w-full'>
+              <Header text={['Bus Number', 'Report ID', 'Date Submitted', 'Status']} />
+              <tbody className='divide-y divide-gray-200'>
+                {filteredReports.map((report) => (
+                  <Row
+                    key={report.id}
+                    text={[
+                      report.bus,
+                      'link=' + report.id,
+                      report.date + ' ' + report.time,
+                      "status=" + report.status,
+                    ]}
+                  />
+                ))}
+              </tbody>
+            </table>
+          )}
         </TableContainer>
       </TableWrapper>
     </Wrapper>

@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import SearchFieldUser from '../../components/Table/SearchFieldUser';
 import Header from '../../components/Table/Header';
 import Row from '../../components/Table/RowUser';
+import { collection, getDocs } from 'firebase/firestore';
+import { firestore } from '../../../firebase';
+
 
 const Wrapper = tw.div`
   sm:w-full
@@ -18,19 +21,29 @@ const TableContainer = tw.div`
 
 const DriverReports = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [reports, setReports] = useState([]);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
+  useEffect(() => {
+    const fetchReports = async () => {
+      const querySnapshot = await getDocs(collection(firestore, 'inspection_reports'));
+      const fetchedReports = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setReports(fetchedReports);
+    };
+
+    fetchReports();
+  }, []);
+
   // Filter rows based on the search term
-  const filteredRows = [
-    { text: ['123', '000001', 'christinehopemedalla', 'christinehopemedalla'] },
-    { text: ['123', '000002', 'christinehopemedalla', 'christinehopemedalla'] },
-    { text: ['123', '000003', 'christinehopemedalla', 'christinehopemedalla'] },
-  ].filter((row) =>
-    row.text.some((cell) =>
-      cell.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredRows = reports.filter((report) =>
+    Object.values(report).some((value) =>
+      String(value).toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
 
@@ -48,7 +61,7 @@ const DriverReports = () => {
             <Header text={['Bus Number', 'Report ID', 'Date Submitted', 'Status']} />
             <tbody className='divide-y divide-gray-200'>
               {filteredRows.map((row, index) => (
-                <Row key={index} text={row.text} />
+                <Row key={index} text={[row.bus, "link=" + row.id, row.date + " " + row.time,  "status=" + row.status]} />
               ))}
             </tbody>
           </table>

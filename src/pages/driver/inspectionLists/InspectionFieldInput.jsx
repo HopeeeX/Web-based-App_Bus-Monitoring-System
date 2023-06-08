@@ -1,6 +1,10 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useRef} from 'react';
 
+function cut(str, cutStart, cutEnd) {
+  return str.substr(0, cutStart) + str.substr(cutEnd + 1);
+}
+
 const InspectionFieldInput = ({ busIdError, handleBusIdChange, busId }) => {
   const busIdInputRef = useRef(null); // Create a ref for the busId input field
 
@@ -11,7 +15,8 @@ const InspectionFieldInput = ({ busIdError, handleBusIdChange, busId }) => {
     )
       .toISOString()
       .split('T')[0];
-    document.getElementById('timeInput').value = date.toTimeString().slice(0, 8);
+    const datestr = date.toTimeString().slice(0, 8);
+    document.getElementById('timeInput').value = cut(datestr, 5, 8);
 
     busIdInputRef.current.focus(); // Set focus on the busId input field
   }, []);

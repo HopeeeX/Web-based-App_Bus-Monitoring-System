@@ -121,9 +121,9 @@ const AdminDriver = ({ onClose }) => {
                     text={[
                       user.name,
                       user.userId,
-                      user.emailAddress,
-                      user.mobileNo,
-                      user.licenseNo,
+                      user.email,
+                      user.phone,
+                      user.license,
                     ]}
                   />
                 ))}

@@ -11,7 +11,7 @@ const RowAdmin = ({ text }) => {
         if (row.includes("status=")) {
           row = row.replace("status=", "");
           return (
-            <td key={index}>
+            <td className="text-center" key={index}>
               <Status status={row} />
             </td>
           );

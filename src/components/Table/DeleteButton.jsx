@@ -7,13 +7,16 @@ const Wrapper = tw.div`
 
 const DeleteButton = () => {
   return (
-    <td>
+    <tr>
+            <td>
       <Wrapper>
         <button className="border outline-none">
           <img src={Delete} alt="option" className="w-[22px] h-[22px]" />
         </button>
       </Wrapper>
     </td>
+    </tr>
+
   );
 };
 

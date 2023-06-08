@@ -42,13 +42,16 @@ const AdminBus = () => {
           setLoading(false);
           return;
         }
-  
+    
         // Fetch buses from Firestore and update local state
         const busesCollection = collection(firestore, 'buses');
         const querySnapshot = await getDocs(busesCollection);
         const fetchedBuses = [];
         querySnapshot.forEach((doc) => {
-          const busData = doc.data();
+          const busData = {
+            id: doc.id, // Include the document ID
+            ...doc.data(),
+          };
           fetchedBuses.push(busData);
         });
         setRows(fetchedBuses);
@@ -58,6 +61,7 @@ const AdminBus = () => {
         setLoading(false);
       }
     };
+    
   
     fetchBuses();
   }, [rows]);
@@ -100,14 +104,14 @@ const AdminBus = () => {
             <p>Loading...</p>
           ) : (
             <table className='w-full'>
-              <Header text={['Plate Number', 'Brand', 'Sitting Capacity', '']} />
+              <Header text={['Bus ID','Plate Number', 'Brand', 'Sitting Capacity', '']} />
               <tbody className='divide-y divide-gray-200'>
-                {filteredRows.map((row) => (
-                  <Row
-                    key={row.plateNumber}
-                    text={[row.plateNumber, row.brand, row.sittingCapacity]}
-                  />
-                ))}
+              {filteredRows.map((row) => (
+  <Row
+    key={row.id} // Use the document ID as the key
+    text={[row.id, row.plateNumber, row.brand, row.sittingCapacity]}
+  />
+))}
               </tbody>
             </table>
           )}

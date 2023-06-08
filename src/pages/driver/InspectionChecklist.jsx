@@ -9,7 +9,12 @@ import tw from 'tailwind-styled-components';
 import { useNavigate } from 'react-router-dom';
 import { InspectionAccess } from './inspectionLists/InspectionContext';
 import { firestore } from '../../../firebase';
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+
+function ReportIDGenerate(number) {
+  const paddedNumber = String(number).padStart(5, '0');
+  return 'R' + paddedNumber;
+}
 
 const InspectionChecklist = () => {
   const { damaged } = InspectionAccess();
@@ -23,11 +28,29 @@ const InspectionChecklist = () => {
     validateBusId(e.target.value);
   };
 
-  const submitReport = () => {
-    if (damaged.length === 0) {
-      //TODO: Add Inspection Report
+  const submitReport = async () => {
+    if (damaged.length === 0 && busId !== '') {
+      const counterRef = doc(firestore, "counters","reports");
+      const count = (await getDoc(counterRef)).data().count + 1;
+      await setDoc(counterRef, {
+        reports: count
+      })
+      const newID = ReportIDGenerate(count)
+      await setDoc(doc(firestore, "inspection_reports", newID), {
+        date: date,
+        damaged: damaged,
+        bus: busId,
+        mechanic: "N/A",
+        remarks: "",
+        status: "Approved",
+        time: time
+      })
       // TODO: Dispatch
-    } else {
+    } else if(busId === '' ){
+      alert('Bus ID is required.');
+      return;
+    }
+    else {
       const remarksInput = document.getElementById('remarksInput');
       if (!remarksInput.value.trim()) {
         alert('Remarks is required.');

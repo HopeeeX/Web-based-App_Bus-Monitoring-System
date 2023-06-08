@@ -6,7 +6,7 @@ import PassengerRating from './PassengerComponents/PassengerRating';
 import PassengerFooter from './PassengerComponents/PassengerFooter';
 import { useParams } from 'react-router-dom';
 import { firestore } from '../../../firebase';
-import { collection, doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 
 const MainPageScreen = () => {
   const { busID } = useParams();

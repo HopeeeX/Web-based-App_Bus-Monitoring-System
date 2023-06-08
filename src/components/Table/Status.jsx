@@ -3,6 +3,27 @@ import React, { useState } from 'react';
 import { updateDoc, doc } from 'firebase/firestore';
 import { firestore } from '../../../firebase';
 
+function getCookieValue(cookieName) {
+  var name = cookieName + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var cookieArray = decodedCookie.split(';');
+
+  for(var i = 0; i < cookieArray.length; i++) {
+    var cookie = cookieArray[i].trim();
+
+    if (cookie.indexOf(name) === 0) {
+      return cookie.substring(name.length, cookie.length);
+    }
+  }
+
+  return null; // Cookie not found
+}
+
+// Usage:
+var cookieValue = getCookieValue("name");
+console.log(cookieValue);
+
+
 const getStatusBackgroundColor = (status) => {
   if (status === 'Pending') {
     return 'bg-[#FBFB79E0] text-[#A7A9AC]';
@@ -15,14 +36,17 @@ const getStatusBackgroundColor = (status) => {
 
 const Status = ({ status, reportId, onStatusChange }) => {
   const [editableStatus, setEditableStatus] = useState(status);
+  const [persona, setPersona] = useState(document.cookie.includes('persona=mechanic'));
 
   const handleStatusChange = async (event) => {
+    if (!persona || editableStatus !== 'Pending') return; // Check if persona is not mechanic or status is not Pending, then return and do nothing
+
     const newStatus = event.target.value;
     setEditableStatus(newStatus);
 
     try {
       const reportRef = doc(firestore, 'inspection_reports', reportId);
-      await updateDoc(reportRef, { status: newStatus });
+      await updateDoc(reportRef, { status: newStatus, mechanic: getCookieValue("name")});
       console.log('Status updated successfully!');
       onStatusChange(reportId, newStatus); // Notify parent component about the status change
     } catch (error) {
@@ -38,6 +62,7 @@ const Status = ({ status, reportId, onStatusChange }) => {
         )}`}
         value={editableStatus}
         onChange={handleStatusChange}
+        disabled={!persona || editableStatus !== 'Pending'} // Disable the select element when persona is not mechanic or status is not Pending
       >
         <option value='Pending' className='bg-white text-[#A7A9AC] hidden'>
           Pending

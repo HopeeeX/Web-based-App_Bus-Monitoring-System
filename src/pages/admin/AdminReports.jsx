@@ -25,6 +25,7 @@ const TableContainer = tw.div`
 const AdminReports = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -32,12 +33,18 @@ const AdminReports = () => {
 
   useEffect(() => {
     const fetchReports = async () => {
-      const querySnapshot = await getDocs(collection(firestore, 'inspection_reports'));
-      const fetchedReports = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setReports(fetchedReports);
+      try {
+        const querySnapshot = await getDocs(collection(firestore, 'inspection_reports'));
+        const fetchedReports = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setReports(fetchedReports);
+        setLoading(false);
+      } catch (error) {
+        console.log('Error fetching reports:', error);
+        setLoading(false);
+      }
     };
 
     fetchReports();
@@ -60,24 +67,30 @@ const AdminReports = () => {
       </Container>
       <TableWrapper>
         <TableContainer>
-          <table className="w-full">
-            <Header
-              text={['Bus Number', 'Report ID', 'Date Submitted', 'Status', '']}
-            />
-            <tbody className="divide-y divide-gray-200">
-              {filteredReports.map((report) => (
-                <Row
-                  key={report.id}
-                  text={[
-                    report.bus,
-                    "link=" + report.id,
-                    report.date + " " + report.time,
-                    "status=" + report.status,
-                  ]}
-                />
-              ))}
-            </tbody>
-          </table>
+          {loading ? (
+            <tr>
+              <td colSpan="5">Loading...</td>
+            </tr>
+          ) : (
+            <table className="w-full">
+              <Header
+                text={['Bus Number', 'Report ID', 'Date Submitted', 'Status', '']}
+              />
+              <tbody className="divide-y divide-gray-200">
+                {filteredReports.map((report) => (
+                  <Row
+                    key={report.id}
+                    text={[
+                      report.bus,
+                      'link=' + report.id,
+                      report.date + ' ' + report.time,
+                      'status=' + report.status,
+                    ]}
+                  />
+                ))}
+              </tbody>
+            </table>
+          )}
         </TableContainer>
       </TableWrapper>
     </Wrapper>

@@ -9,7 +9,6 @@ const RowAdmin = ({ text }) => {
     <tr>
       {text.map((row, index) => {
         if (row.includes("status=")) {
-          console.log(row);
           row = row.replace("status=", "");
           return (
             <td key={index}>

@@ -32,7 +32,6 @@ const InspectionChecklist = () => {
     if (damaged.length === 0 && busId !== '') {
       const counterRef = doc(firestore, "counters","reports");
       var count = (await getDoc(counterRef)).data().count + 1;
-      console.log(count);
       await setDoc(counterRef, {
         count: count
       })

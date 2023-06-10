@@ -8,6 +8,9 @@ const RowAdmin = ({ text, onDelete }) => {
   return (
     <tr>
       {text.map((row, index) => {
+          if (typeof row === 'number') {
+            row = row.toString();
+          } 
         if (row.includes("status=")) {
           row = row.replace("status=", "");
           return (

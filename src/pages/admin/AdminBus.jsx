@@ -3,9 +3,9 @@ import tw from 'tailwind-styled-components';
 import AddButton from '../../components/Table/AddButton';
 import SearchFieldAdmin from '../../components/Table/SearchFieldAdmin';
 import Header from '../../components/Table/Header';
-import Row from '../../components/Table/RowAdmin';
+import RowAdmin from '../../components/Table/RowAdmin';
 import AddBus from '../../components/Modals/AddBus';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc, addDoc } from 'firebase/firestore';
 import { firestore } from '../../../firebase';
 
 const Wrapper = tw.div`
@@ -28,43 +28,48 @@ const ModalWrapper = tw.div`
   fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center
 `;
 
+
 const AdminBus = () => {
   const [showModal, setShowModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState([]);
+  const [refreshTable, setRefreshTable] = useState(false);
 
   useEffect(() => {
     const fetchBuses = async () => {
       try {
-        // Check if buses are already in local state (cached)
-        if (rows.length > 0) {
+        if (rows.length > 0 && !refreshTable) {
           setLoading(false);
           return;
         }
-    
-        // Fetch buses from Firestore and update local state
+
         const busesCollection = collection(firestore, 'buses');
         const querySnapshot = await getDocs(busesCollection);
         const fetchedBuses = [];
         querySnapshot.forEach((doc) => {
           const busData = {
-            id: doc.id, // Include the document ID
+            id: doc.id,
             ...doc.data(),
           };
           fetchedBuses.push(busData);
         });
         setRows(fetchedBuses);
         setLoading(false);
+        setRefreshTable(false);
       } catch (error) {
         console.log('Error fetching buses:', error);
         setLoading(false);
       }
     };
-    
-  
+
     fetchBuses();
-  }, [rows]);
+  }, [rows, refreshTable]);
+
+  const handleRefreshTable = () => {
+    setLoading(true);
+    setRows([]);
+  };
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -72,14 +77,27 @@ const AdminBus = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
+    setRefreshTable(true);
   };
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
+  const handleDelete = async (id) => {
+    try {
+      const busRef = doc(firestore, 'buses', id);
+      await deleteDoc(busRef);
+
+      const updatedRows = rows.filter((row) => row.id !== id);
+      setRows(updatedRows);
+    } catch (error) {
+      console.log('Error deleting bus:', error);
+    }
+  };
+
   const filteredRows = rows.filter((row) =>
-    row.plateNumber.toLowerCase().includes(searchQuery.toLowerCase())
+    row.plate.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -88,7 +106,7 @@ const AdminBus = () => {
         <AddButton text='Add Bus' clickfunc={handleOpenModal} />
         {showModal && (
           <ModalWrapper>
-            <AddBus onClose={handleCloseModal} />
+            <AddBus onClose={handleCloseModal} onTableRefresh={handleRefreshTable} />
           </ModalWrapper>
         )}
         <SearchFieldAdmin
@@ -104,14 +122,15 @@ const AdminBus = () => {
             <p>Loading...</p>
           ) : (
             <table className='w-full'>
-              <Header text={['Bus ID','Plate Number', 'Brand', 'Sitting Capacity', '']} />
+              <Header text={['Bus ID', 'Plate Number', 'Brand', 'Sitting Capacity', '']} />
               <tbody className='divide-y divide-gray-200'>
-              {filteredRows.map((row) => (
-  <Row
-    key={row.id} // Use the document ID as the key
-    text={[row.id, row.plateNumber, row.brand, row.sittingCapacity]}
-  />
-))}
+                {filteredRows.map((row) => (
+                  <RowAdmin
+                    key={row.id}
+                    text={[row.id, row.plate, row.brand, row.capacity]}
+                    onDelete={() => handleDelete(row.id)}
+                  />
+                ))}
               </tbody>
             </table>
           )}

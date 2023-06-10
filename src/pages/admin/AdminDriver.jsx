@@ -29,11 +29,36 @@ const ModalWrapper = tw.div`
   fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center
 `;
 
-const AdminDriver = ({ onClose }) => {
+const AdminDriver = () => {
   const [showModal, setShowModal] = useState(false);
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
+
+  const handleAddUser = async () => {
+    try {
+      // Add user logic here
+      // ...
+
+      // Close the modal
+      handleCloseModal();
+
+      // Reload the drivers data from Firestore
+      setLoading(true); // Set loading state to true
+
+      const driversCollection = collection(firestore, "drivers");
+      const querySnapshot = await getDocs(driversCollection);
+      const fetchedDrivers = [];
+      querySnapshot.forEach((doc) => {
+        const mechanicData = { ...doc.data(), userId: doc.id };
+        fetchedDrivers.push(mechanicData);
+      });
+      setUsers(fetchedDrivers);
+      setLoading(false); // Set loading state back to false
+    } catch (error) {
+      console.log("Error adding user:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -67,11 +92,6 @@ const AdminDriver = ({ onClose }) => {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    onClose();
-  };
-
-  const addUser = (user) => {
-    setUsers([...users, user]);
   };
 
   const handleSearchChange = (event) => {
@@ -88,7 +108,7 @@ const AdminDriver = ({ onClose }) => {
         <AddButton text="Add User" clickfunc={handleOpenModal} />
         {showModal && (
           <ModalWrapper>
-            <AddUserModal onClose={handleCloseModal} addUser={addUser} />
+            <AddUserModal onClose={handleCloseModal} onAddUser={handleAddUser} persona="drivers" />
           </ModalWrapper>
         )}
         <SearchFieldAdmin

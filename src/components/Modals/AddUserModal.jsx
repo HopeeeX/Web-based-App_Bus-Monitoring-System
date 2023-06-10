@@ -8,17 +8,22 @@ import Card from '../../assets/icons/Card.png';
 import PHFlag from '../../assets/icons/Philippines.png';
 import Close from '../../assets/icons/Close.png'
 import SuccessfullyCreated from './SuccessfullyCreated';
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { auth, firestore } from "../../../firebase";
 
-const AddUserModal = ({onClose}) => {
+const AddUserModal = ({onClose, onAddUser, persona}) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [mobileNumber, setMobileNumber] = useState('');
-  const [licenseNumber, setLicenseNumber] = useState('');
+  const [phone, setMobileNumber] = useState('');
+  const [license, setLicenseNumber] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  
   
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
@@ -28,13 +33,39 @@ const AddUserModal = ({onClose}) => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted');
-    setShowSuccess(true);
+  
+    try {
+      setLoading(true); // Set loading state to true
+
+      // Create user with email and password
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+  
+      // Store user data in the "mechanics" collection
+      const mechanicsCollection = collection(firestore, persona);
+      const userDocRef = doc(mechanicsCollection, user.uid);
+      await setDoc(userDocRef, {
+        name,
+        email,
+        phone,
+        license,
+      });
+  
+      setShowSuccess(true);
+    } catch (error) {
+      console.log("Error creating user:", error);
+    } finally {
+      setLoading(false); // Set loading state back to false
+    }
   };
 
   const handleSuccessClose = () => {
+    onAddUser();
     setShowSuccess(false);
     onClose();
   };
@@ -63,16 +94,16 @@ const AddUserModal = ({onClose}) => {
             Name
           </label>
           <div className='relative'>
-          <input
-            type='text'
-            id='name'
-            placeholder='Enter the name'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className='border outline-1 outline-gray-300 border-gray-300 rounded-lg h-10 pl-4 bg-transparent w-full text-xs md:text-sm'
-            required
-          />
-          <img src={User} className='absolute top-3 md:top-2 right-2 w-4 h-4 md:w-5 md:h-5'></img>
+            <input
+              type='text'
+              id='name'
+              placeholder='Enter the name'
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className='border outline-1 outline-gray-300 border-gray-300 rounded-lg h-10 pl-4 bg-transparent w-full text-xs md:text-sm'
+              required
+            />
+            <img src={User} className='absolute top-3 md:top-2 right-2 w-4 h-4 md:w-5 md:h-5'></img>
           </div>
         </div>
         <div className='flex flex-col mb-4'>
@@ -105,7 +136,7 @@ const AddUserModal = ({onClose}) => {
               type='tel'
               id='mobileNumber'
               placeholder='Enter number'
-              value={mobileNumber}
+              value={phone}
               onChange={(e) => setMobileNumber(e.target.value)}
               className='border outline-1 outline-gray-300 border-gray-300 rounded-lg h-10 pl-4 bg-transparent w-full text-xs md:text-sm'
               pattern='[0-9]{10}'
@@ -123,7 +154,7 @@ const AddUserModal = ({onClose}) => {
               type='text'
               id='licenseNumber'
               placeholder='Enter license number'
-              value={licenseNumber}
+              value={license}
               onChange={(e) => setLicenseNumber(e.target.value)}
               className='border outline-1 outline-gray-300 border-gray-300 rounded-lg h-10 pl-4 bg-transparent w-full text-xs md:text-sm'
               required
@@ -180,11 +211,11 @@ const AddUserModal = ({onClose}) => {
         <button
           type='submit'
           className='bg-secondary place-self-center font-inter text-lg md:text-xl text-white px-4 py-2 mt-4 mb-2 text-center font-semibold rounded-2xl col-span-2 w-2/3'
+          disabled={loading} // Disable the button when loading is true
         >
-          Create
+          {loading ? 'Creating...' : 'Create'}
         </button>
       </form>
-      
     </div>
   );
 };

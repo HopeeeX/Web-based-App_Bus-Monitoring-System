@@ -46,6 +46,31 @@ const AdminMechanic = () => {
     setSearchQuery(event.target.value);
   };
 
+  const handleAddUser = async () => {
+    try {
+      // Add user logic here
+      // ...
+
+      // Close the modal
+      handleCloseModal();
+
+      // Reload the mechanics data from Firestore
+      setLoading(true); // Set loading state to true
+
+      const mechanicsCollection = collection(firestore, "mechanics");
+      const querySnapshot = await getDocs(mechanicsCollection);
+      const fetchedMechanics = [];
+      querySnapshot.forEach((doc) => {
+        const mechanicData = { ...doc.data(), userId: doc.id };
+        fetchedMechanics.push(mechanicData);
+      });
+      setRows(fetchedMechanics);
+      setLoading(false); // Set loading state back to false
+    } catch (error) {
+      console.log("Error adding user:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchMechanics = async () => {
       try {
@@ -84,7 +109,7 @@ const AdminMechanic = () => {
         <AddButton text="Add User" clickfunc={handleOpenModal} />
         {showModal && (
           <ModalWrapper>
-            <AddUserModal onClose={handleCloseModal} />
+            <AddUserModal onClose={handleCloseModal} onAddUser={handleAddUser} persona="mechanics" />
           </ModalWrapper>
         )}
         <SearchFieldAdmin

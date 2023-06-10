@@ -4,7 +4,7 @@ import Delete from "./DeleteButton";
 import Status from "./Status";
 import { Link } from "react-router-dom";
 
-const RowAdmin = ({ text }) => {
+const RowAdmin = ({ text, onDelete }) => {
   return (
     <tr>
       {text.map((row, index) => {
@@ -39,13 +39,16 @@ const RowAdmin = ({ text }) => {
           );
         }
       })}
-      <Delete />
+      <td className="text-center">
+        <Delete onDelete={onDelete} />
+      </td>
     </tr>
   );
 };
 
 RowAdmin.propTypes = {
   text: PropTypes.array.isRequired,
+  onDelete: PropTypes.func,
 };
 
 export default RowAdmin;

@@ -31,9 +31,10 @@ const InspectionChecklist = () => {
   const submitReport = async () => {
     if (damaged.length === 0 && busId !== '') {
       const counterRef = doc(firestore, "counters","reports");
-      const count = (await getDoc(counterRef)).data().count + 1;
+      var count = (await getDoc(counterRef)).data().count + 1;
+      console.log(count);
       await setDoc(counterRef, {
-        reports: count
+        count: count
       })
       const newID = ReportIDGenerate(count)
       await setDoc(doc(firestore, "inspection_reports", newID), {

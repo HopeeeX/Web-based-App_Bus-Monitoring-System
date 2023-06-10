@@ -1,20 +1,34 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
-import Close from '../../assets/icons/Close.png'
-
+import { collection, addDoc } from 'firebase/firestore';
+import { firestore } from '../../../firebase';
+import Close from '../../assets/icons/Close.png';
 
 const AddRoute = ({ onClose }) => {
   const [routeNumber, setRouteNumber] = useState('');
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
-  const [distance, setDistance] = useState('');
 
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted');
-    onClose();
+    
+    try {
+      // Create a new route object
+      const route = {
+        number: routeNumber,
+        origin: origin,
+        destination: destination,
+      };
+
+      // Add the route to the "routes" collection in Firestore
+      const routesCollection = collection(firestore, 'routes');
+      await addDoc(routesCollection, route);
+
+      console.log('Route added successfully');
+      onClose();
+    } catch (error) {
+      console.log('Error adding route:', error);
+    }
   };
 
   const handleCloseModal = () => {
@@ -24,7 +38,7 @@ const AddRoute = ({ onClose }) => {
   return (
     <div className='bg-primary pt-4 pb-3 pl-10 pr-10 rounded-2xl drop-shadow-lg items-center flex flex-col text-center w-9/12 md:w-[450px]'>
       <div>
-      <button onClick={handleCloseModal}>
+        <button onClick={handleCloseModal}>
           <img src={Close} alt='close' className='w-[20px] h-[20px] absolute top-4 right-4 focus:outline-none'/>
         </button>
       </div>
@@ -71,21 +85,6 @@ const AddRoute = ({ onClose }) => {
             placeholder='Enter destination'
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
-            className='border outline-1 outline-gray-300 border-gray-300 rounded-lg h-10 pl-4 bg-transparent w-full text-xs md:text-sm'
-            required
-          />
-        </div>
-        
-        <div className='flex flex-col mb-4 w-full'>
-          <label htmlFor='name' className='text-white mb-1 text-xs md:text-sm font-semibold'>
-            Distance
-          </label>
-          <input
-            type='text'
-            id='name'
-            placeholder='Enter distance'
-            value={distance}
-            onChange={(e) => setDistance(e.target.value)}
             className='border outline-1 outline-gray-300 border-gray-300 rounded-lg h-10 pl-4 bg-transparent w-full text-xs md:text-sm'
             required
           />

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import SearchFieldAdmin from '../../components/Table/SearchFieldAdmin';
 import Header from '../../components/Table/Header';
-import Row from '../../components/Table/RowAdmin';
-import { collection, getDocs } from 'firebase/firestore';
+import RowAdmin from '../../components/Table/RowAdmin';
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { firestore } from '../../../firebase';
 
 const Wrapper = tw.div`
@@ -50,6 +50,15 @@ const AdminReports = () => {
     fetchReports();
   }, []);
 
+  const handleDeleteReport = async (reportId) => {
+    try {
+      await deleteDoc(doc(firestore, 'inspection_reports', reportId));
+      setReports((prevReports) => prevReports.filter((report) => report.id !== reportId));
+    } catch (error) {
+      console.log('Error deleting report:', error);
+    }
+  };
+
   // Filter the reports based on the search query
   const filteredReports = reports.filter((report) =>
     report.id.toLowerCase().includes(searchQuery.toLowerCase())
@@ -68,17 +77,19 @@ const AdminReports = () => {
       <TableWrapper>
         <TableContainer>
           {loading ? (
-            <tr>
-              <td colSpan="5">Loading...</td>
-            </tr>
+            <table>
+              <tbody>
+                <tr>
+                  <td colSpan="5">Loading...</td>
+                </tr>
+              </tbody>
+            </table>
           ) : (
             <table className="w-full">
-              <Header
-                text={['Bus Number', 'Report ID', 'Date Submitted', 'Status', '']}
-              />
+              <Header text={['Bus Number', 'Report ID', 'Date Submitted', 'Status', '']} />
               <tbody className="divide-y divide-gray-200">
                 {filteredReports.map((report) => (
-                  <Row
+                  <RowAdmin
                     key={report.id}
                     text={[
                       report.bus,
@@ -86,6 +97,7 @@ const AdminReports = () => {
                       report.date + ' ' + report.time,
                       'status=' + report.status,
                     ]}
+                    onDelete={() => handleDeleteReport(report.id)}
                   />
                 ))}
               </tbody>

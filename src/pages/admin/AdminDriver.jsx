@@ -117,7 +117,7 @@ const AdminDriver = ({ onClose }) => {
               <tbody className="divide-y divide-gray-200">
                 {filteredUsers.map((user) => (
                   <Row
-                    key={user.id}
+                    key={user.userId}
                     text={[
                       user.name,
                       user.userId,

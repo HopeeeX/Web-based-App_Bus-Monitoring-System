@@ -21,7 +21,6 @@ function getCookieValue(cookieName) {
 
 // Usage:
 var cookieValue = getCookieValue("name");
-console.log(cookieValue);
 
 
 const getStatusBackgroundColor = (status) => {

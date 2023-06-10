@@ -8,6 +8,7 @@ import Row from "../../components/Table/RowAdmin";
 import AddRoute from "../../components/Modals/AddRoute";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../../../firebase";
+import { deleteDoc, doc } from "firebase/firestore";
 
 const Wrapper = tw.div`
   lg:ml-[220px] md:ml-[105px] sm:w-full  
@@ -41,11 +42,25 @@ const AdminRoute = ({ onClose }) => {
 
   const handleCloseModal = () => {
     setShowModal(false);
+    window.location.reload(true);
     onClose();
   };
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
+  };
+
+  const handleDeleteRoute = async (routeId) => {
+    try {
+      // Delete the route document from Firestore
+      await deleteDoc(doc(firestore, "routes", routeId));
+      // Remove the route from local state
+      setRoutes((prevRoutes) =>
+        prevRoutes.filter((route) => route.id !== routeId)
+      );
+    } catch (error) {
+      console.log("Error deleting route:", error);
+    }
   };
 
   useEffect(() => {
@@ -99,9 +114,14 @@ const AdminRoute = ({ onClose }) => {
       <TableWrapper>
         <TableContainer>
           {loading ? (
-            <tr>
+            <table>
+              <tbody>
+              <tr>
               <td colSpan="4">Loading...</td>
             </tr>
+              </tbody>
+            </table>
+
           ) : (
             <table className="w-full">
               <Header text={["Route Number", "Origin", "Destination", ""]} />
@@ -110,8 +130,9 @@ const AdminRoute = ({ onClose }) => {
                   <Row
                     key={route.id}
                     text={[route.number, route.origin, route.destination]}
+                    onDelete={() => handleDeleteRoute(route.id)}
                   />
-                ))}{" "}
+                ))}
               </tbody>
             </table>
           )}

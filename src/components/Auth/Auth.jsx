@@ -39,13 +39,25 @@ export const AuthProvider = ({ children }) => {
       const currentUser = await new CurrentUser(userCredential.user);
   
       // Wait until userdata is not null or undefined
-      while (currentUser.userdata === null || currentUser.userdata === undefined || currentUser.persona == null || currentUser.persona == undefined) {
+      let timeout = 0;
+      while (
+        currentUser.userdata === null ||
+        currentUser.userdata === undefined ||
+        currentUser.persona === null ||
+        currentUser.persona === undefined
+      ) {
         await new Promise(resolve => setTimeout(resolve, 100)); // Wait for 100ms
+        timeout += 100;
+        if (timeout >= 10000 && (currentUser.persona === null || currentUser.persona === undefined)) {
+          throw new Error('Persona is undefined for 10 seconds.');
+        }
       }
+      
   
       const displayName = currentUser.userdata?.name;
       setAuthCookies(tokenResult, displayName, currentUser.persona);
       setState({ user: userCredential.user });
+      console.log(currentUser.persona);
       switch(currentUser.persona){
         case "driver":
           navigate("/driver");
@@ -59,10 +71,12 @@ export const AuthProvider = ({ children }) => {
         case "superadmin":
           navigate("/admin");
           break;
+        case "deleted":
+          logout();
+          throw new Error("Invalid email or password.");
       }
 
     } catch (error) {
-      console.error(error);
       throw new Error("Invalid email or password.");
     }
   };

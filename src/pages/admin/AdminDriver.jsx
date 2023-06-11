@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
-import { collection, getDocs } from 'firebase/firestore';
-import { firestore } from '../../../firebase';
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { auth, firestore } from '../../../firebase';
 import AddButton from '../../components/Table/AddButton';
 import SearchFieldAdmin from '../../components/Table/SearchFieldAdmin';
 import Header from '../../components/Table/Header';
@@ -34,6 +34,30 @@ const AdminDriver = () => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
+
+  const handleDeleteUser = async (userId) => {
+    try {
+      setLoading(true); // Set loading state to true
+      // Delete user from Firestore collection
+      const userDocRef = doc(firestore, 'drivers', userId);
+      await deleteDoc(userDocRef);
+
+      // Reload the drivers data from Firestore
+      
+
+      const driversCollection = collection(firestore, 'drivers');
+      const querySnapshot = await getDocs(driversCollection);
+      const fetchedDrivers = [];
+      querySnapshot.forEach((doc) => {
+        const mechanicData = { ...doc.data(), userId: doc.id };
+        fetchedDrivers.push(mechanicData);
+      });
+      setUsers(fetchedDrivers);
+      setLoading(false); // Set loading state back to false
+    } catch (error) {
+      console.log('Error deleting user:', error);
+    }
+  };
 
   const handleAddUser = async () => {
     try {
@@ -145,6 +169,7 @@ const AdminDriver = () => {
                       user.phone,
                       user.license,
                     ]}
+                    onDelete={() => handleDeleteUser(user.userId)}
                   />
                 ))}
               </tbody>

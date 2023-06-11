@@ -23,15 +23,13 @@ const AddUserModal = ({onClose, onAddUser, persona}) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  
-  
-  const handlePasswordToggle = () => {
-    setShowPassword(!showPassword);
-  };
 
-  const handleConfirmPasswordToggle = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
+  if(persona === "admins"){
+    var addon = "hidden"
+  } else {
+    addon = ""
+  }
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,16 +43,18 @@ const AddUserModal = ({onClose, onAddUser, persona}) => {
         email,
         password
       );
-  
-      // Store user data in the "mechanics" collection
-      const mechanicsCollection = collection(firestore, persona);
-      const userDocRef = doc(mechanicsCollection, user.uid);
-      await setDoc(userDocRef, {
+
+      const formData = {
         name,
         email,
-        phone,
-        license,
-      });
+        ...(persona !== 'admins' && { phone, license }),
+      };
+      
+  
+      // Store user data in the "user" collection
+      const userCollection = collection(firestore, persona);
+      const userDocRef = doc(userCollection, user.uid);
+      await setDoc(userDocRef, formData);
   
       setShowSuccess(true);
     } catch (error) {
@@ -123,7 +123,7 @@ const AddUserModal = ({onClose, onAddUser, persona}) => {
           <img src={Mail} className='absolute top-3 md:top-2 right-2 w-4 h-4 md:w-5 md:h-5'></img>
           </div>
         </div>
-        <div className='flex flex-col mb-4'>
+        <div className={`flex flex-col mb-4 ${addon}`}>
           <label htmlFor='mobileNumber' className='text-white mb-1 text-xs md:text-sm  font-semibold'>
             Mobile Number
           </label>
@@ -133,19 +133,19 @@ const AddUserModal = ({onClose, onAddUser, persona}) => {
               <img src={PHFlag} className='absolute top-3 md:top-2 left-2 w-4 h-4 md:w-5 md:h-5'></img>
             </div>
             <input
-              type='tel'
-              id='mobileNumber'
-              placeholder='Enter number'
-              value={phone}
-              onChange={(e) => setMobileNumber(e.target.value)}
-              className='border outline-1 outline-gray-300 border-gray-300 rounded-lg h-10 pl-4 bg-transparent w-full text-xs md:text-sm'
-              pattern='[0-9]{10}'
-              maxLength='10'
-              required
-            /> 
+  type='tel'
+  id='mobileNumber'
+  placeholder='Enter number'
+  value={phone}
+  onChange={(e) => setMobileNumber(e.target.value)}
+  className='border outline-1 outline-gray-300 border-gray-300 rounded-lg h-10 pl-4 bg-transparent w-full text-xs md:text-sm'
+  pattern='[0-9]{10}'
+  maxLength='10'
+  {...persona === 'admins' && 'required'}
+/>
           </div>
         </div>
-        <div className='flex flex-col mb-4'>
+        <div className={`flex flex-col mb-4 ${addon}`}>
           <label htmlFor='licenseNumber' className='text-white mb-1 text-xs md:text-sm  font-semibold'>
             License Number
           </label>
@@ -157,7 +157,7 @@ const AddUserModal = ({onClose, onAddUser, persona}) => {
               value={license}
               onChange={(e) => setLicenseNumber(e.target.value)}
               className='border outline-1 outline-gray-300 border-gray-300 rounded-lg h-10 pl-4 bg-transparent w-full text-xs md:text-sm'
-              required
+              {...persona === 'admins' && 'required'}
             />
             <img src={Card} className='absolute top-3 md:top-2 right-2 w-4 h-4 md:w-5 md:h-5'></img>
           </div>

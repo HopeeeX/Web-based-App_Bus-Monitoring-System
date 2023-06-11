@@ -48,7 +48,7 @@ const AdminList = () => {
         const querySnapshot = await getDocs(collection(firestore, 'admins'));
         const adminData = querySnapshot.docs.map((doc) => ({
           ...doc.data(),
-          id: doc.id, // Use document ID as the admin ID
+          userId: doc.id, // Use document ID as the admin ID
         }));
         setAdmins(adminData);
         setLoading(false);
@@ -60,6 +60,31 @@ const AdminList = () => {
 
     fetchAdmins();
   }, [admins]);
+
+  const handleAddUser = async () => {
+    try {
+      // Add user logic here
+      // ...
+
+      // Close the modal
+      handleCloseModal();
+
+      // Reload the admins data from Firestore
+      setLoading(true); // Set loading state to true
+
+      const adminsCollection = collection(firestore, "admins");
+      const querySnapshot = await getDocs(adminsCollection);
+      const adminsDrivers = [];
+      querySnapshot.forEach((doc) => {
+        const adminData = { ...doc.data(), userId: doc.id };
+        adminsDrivers.push(adminData);
+      });
+      setAdmins(adminsDrivers);
+      setLoading(false); // Set loading state back to false
+    } catch (error) {
+      console.log("Error adding user:", error);
+    }
+  };
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -83,7 +108,7 @@ const AdminList = () => {
         <AddButton text="Add User" clickfunc={handleOpenModal} />
         {showModal && (
           <ModalWrapper>
-            <AddUserModal onClose={handleCloseModal} />
+            <AddUserModal onClose={handleCloseModal} onAddUser={handleAddUser} persona="admins" />
           </ModalWrapper>
         )}
         <SearchFieldAdmin
@@ -103,8 +128,8 @@ const AdminList = () => {
               <tbody className="divide-y divide-gray-200">
                 {filteredAdmins.map((admin) => (
                   <Row
-                    key={admin.id}
-                    text={[admin.name, admin.id, admin.email]}
+                    key={admin.userId}
+                    text={[admin.name, admin.userId, admin.email]}
                   />
                 ))}
               </tbody>

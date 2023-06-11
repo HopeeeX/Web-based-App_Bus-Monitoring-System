@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import SearchFieldUser from '../../components/Table/SearchFieldUser';
 import Header from '../../components/Table/Header';
 import Row from '../../components/Table/RowUser';
+import { collection, getDocs } from 'firebase/firestore';
+import { firestore } from '../../../firebase'; // Assuming you have a Firebase configuration file and initialized Firebase app
 
 const Wrapper = tw.div`
   sm:w-full
@@ -18,19 +20,36 @@ const TableContainer = tw.div`
 
 const DriverTrips = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [trips, setTrips] = useState([]);
+
+  useEffect(() => {
+    const fetchTrips = async () => {
+      const querySnapshot = await getDocs(collection(firestore, 'trips'));
+      const tripData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setTrips(tripData);
+    };
+
+    fetchTrips();
+  }, []);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  // Filter rows based on the search term
-  const filteredRows = [
-    { text: ['123', '123', '123', '123', '123'] },
-  ].filter((row) =>
-    row.text.some((cell) =>
-      cell.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+  const filteredRows = trips.filter((trip) =>
+    trip.id.includes(searchTerm)
+  ).map((trip) => ({
+    text: [
+      trip.id,
+      trip.timeStart,
+      trip.timeEnd,
+      trip.date,
+      trip.route,
+    ],
+  }));
 
   return (
     <Wrapper>

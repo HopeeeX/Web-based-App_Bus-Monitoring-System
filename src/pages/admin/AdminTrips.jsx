@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import SearchFieldAdmin from '../../components/Table/SearchFieldAdmin';
 import Header from '../../components/Table/Header';
 import Row from '../../components/Table/RowAdmin';
+import { collection, getDocs } from 'firebase/firestore';
+import { firestore } from '../../../firebase'; // Assuming you have a Firebase configuration file and initialized Firebase app
 
 const Wrapper = tw.div`
   lg:ml-[220px] md:ml-[105px] sm:w-full  
@@ -22,31 +24,23 @@ const TableContainer = tw.div`
 
 const AdminTrips = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [trips, setTrips] = useState([]);
 
-  // Sample trips array with placeholder values
-  const trips = [
-    {
-      id: '1',
-      tripId: '123',
-      timeStarted: '9:00 AM',
-      timeEnded: '10:00 AM',
-      date: '2023-06-01',
-      route: 'Route 1',
-    },
-    {
-      id: '2',
-      tripId: '456',
-      timeStarted: '10:30 AM',
-      timeEnded: '11:30 AM',
-      date: '2023-06-02',
-      route: 'Route 2',
-    },
-    // Add more sample trips as needed
-  ];
+  useEffect(() => {
+    const fetchTrips = async () => {
+      const querySnapshot = await getDocs(collection(firestore, 'trips'));
+      const tripData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setTrips(tripData);
+    };
 
-  // Filter the trips based on the search query
+    fetchTrips();
+  }, []);
+
   const filteredTrips = trips.filter((trip) =>
-    trip.tripId.toLowerCase().includes(searchQuery.toLowerCase())
+    trip.id.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -63,16 +57,17 @@ const AdminTrips = () => {
         <TableContainer>
           <table className="w-full">
             <Header
-              text={['Trip ID', 'Time Started', 'Time Ended', 'Date', 'Route', '']}
+              text={['Trip ID','Driver', 'Time Started', 'Time Ended', 'Date', 'Route', '']}
             />
             <tbody className="divide-y divide-gray-200">
               {filteredTrips.map((trip) => (
                 <Row
                   key={trip.id}
                   text={[
-                    trip.tripId,
-                    trip.timeStarted,
-                    trip.timeEnded,
+                    trip.id,
+                    trip.driver,
+                    trip.timeStart,
+                    trip.timeEnd,
                     trip.date,
                     trip.route,
                   ]}

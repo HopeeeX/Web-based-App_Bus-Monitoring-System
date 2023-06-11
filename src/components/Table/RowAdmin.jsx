@@ -10,7 +10,8 @@ const RowAdmin = ({ text, onDelete }) => {
       {text.map((row, index) => {
           if (typeof row === 'number') {
             row = row.toString();
-          } 
+          }
+          console.log(row)
         if (row.includes("status=")) {
           row = row.replace("status=", "");
           return (

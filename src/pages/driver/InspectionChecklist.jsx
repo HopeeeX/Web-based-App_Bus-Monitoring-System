@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect} from 'react';
 import InspectionFieldInput from './inspectionLists/InspectionFieldInput';
 import InspectionFront from './inspectionLists/InspectionFront';
 import InspectionRight from './inspectionLists/InspectionRight';
@@ -9,48 +9,96 @@ import tw from 'tailwind-styled-components';
 import { useNavigate } from 'react-router-dom';
 import { InspectionAccess } from './inspectionLists/InspectionContext';
 import { firestore } from '../../../firebase';
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, getDocs, query, where, collection, updateDoc} from 'firebase/firestore';
+import { UserAuth } from '../../components/Auth/Auth';
 
 function ReportIDGenerate(number) {
   const paddedNumber = String(number).padStart(5, '0');
   return 'R' + paddedNumber;
 }
 
+function TripIDGenerate(number) {
+  const paddedNumber = String(number).padStart(5, '0');
+  return 'T' + paddedNumber;
+}
+
 const InspectionChecklist = () => {
   const { damaged } = InspectionAccess();
   const [busIdError, setBusIdError] = useState('');
+  const [routeIdError, setRouteIdError] = useState('');
   const [busId, setBusId] = useState('');
+  const [routeId, setRouteId] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
+  const [focusedInput, setFocusedInput] = useState("")
+  const busIdInputRef = useRef(null);
+  const routeIdInputRef = useRef(null);
+  const [currentUser, setCurrentUser] = useState(null)
+  const { user } = UserAuth();
 
   const handleBusIdChange = (e) => {
     setBusId(e.target.value);
     validateBusId(e.target.value);
+    setFocusedInput("bus");
   };
 
+  const handleRouteIdChange = (e) => {
+    setRouteId(e.target.value);
+    validateRouteId(e.target.value);
+    setFocusedInput("route");
+  };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if(user){
+        setCurrentUser(user.userInstance.uid);
+      }
+
+    }
+
+    fetchUser();
+
+  }, [user])
+  
+
   const submitReport = async () => {
-    if (damaged.length === 0 && busId !== '') {
-      const counterRef = doc(firestore, "counters","reports");
-      var count = (await getDoc(counterRef)).data().count + 1;
-      await setDoc(counterRef, {
-        count: count
-      })
-      const newID = ReportIDGenerate(count)
-      await setDoc(doc(firestore, "inspection_reports", newID), {
+    if (damaged.length === 0 && busId !== '' && routeId !== '') {
+      const reportsCounterRef = doc(firestore, 'counters', 'reports');
+      var reportCount = (await getDoc(reportsCounterRef)).data().count + 1;
+      await setDoc(reportsCounterRef, {
+        count: reportCount,
+      });
+      const newReportID = ReportIDGenerate(reportCount);
+      await setDoc(doc(firestore, 'inspection_reports', newReportID), {
         date: date,
         damaged: damaged,
         bus: busId,
-        mechanic: "N/A",
-        remarks: "",
-        status: "Approved",
-        time: time
+        mechanic: 'N/A',
+        remarks: '',
+        status: 'Approved',
+        time: time,
+      });
+      const tripsCounterRef = doc(firestore, 'counters', 'trips');
+      var tripCount = (await getDoc(tripsCounterRef)).data().count + 1;
+      await setDoc(tripsCounterRef, {
+        count: tripCount,
+      });
+      const newTripID = TripIDGenerate(tripCount);
+      await setDoc(doc(firestore, 'trips', newTripID), {
+        date: date,
+        timeStart: time,
+        route: routeId,
+        timeEnd: "On Journey"
+      });
+
+      await updateDoc(doc(firestore, 'drivers', currentUser), {
+        onJourney: true,
+        currentTrip: newTripID
       })
-      // TODO: Dispatch
-    } else if(busId === '' ){
+    } else if (busId === '') {
       alert('Bus ID is required.');
       return;
-    }
-    else {
+    } else {
       const remarksInput = document.getElementById('remarksInput');
       if (!remarksInput.value.trim()) {
         alert('Remarks is required.');
@@ -60,12 +108,12 @@ const InspectionChecklist = () => {
     }
     navigate('/driver');
   };
-  
+
   const navigate = useNavigate();
 
   const validateBusId = async (busId) => {
     try {
-      const docRef = doc(firestore, "buses", busId);
+      const docRef = doc(firestore, 'buses', busId);
       const docSnapshot = await getDoc(docRef);
 
       if (!docSnapshot.exists()) {
@@ -78,23 +126,46 @@ const InspectionChecklist = () => {
     }
   };
 
+  const validateRouteId = async (routeId) => {
+    try {
+      const querySnapshot = await getDocs(
+        query(collection(firestore, 'routes'), where('number', '==', routeId))
+      );
+  
+      if (querySnapshot.empty) {
+        setRouteIdError('Route ID does not exist.');
+      } else {
+        setRouteIdError('');
+      }
+    } catch (error) {
+      console.error('Error validating route ID:', error);
+    }
+  };
+  
+
   const MainWrapper = tw.div`
     flex flex-col justify-center items-center font-inter bg-[#F3F3F3] pb-14 md:pb-40 lg:pb-52
   `;
 
   return (
     <MainWrapper>
-      <h1 className='w-full font-semibold text-center text-inspectionTitle  text-2xl sm:text-3xl md:text-4xl lg:text-[40px] border-b-2 pt-8 pb-6 border-secondary mb-8'>
+      <h1 className="w-full font-semibold text-center text-inspectionTitle  text-2xl sm:text-3xl md:text-4xl lg:text-[40px] border-b-2 pt-8 pb-6 border-secondary mb-8">
         360-Degree Inspection Form
       </h1>
       <InspectionFieldInput
         busIdError={busIdError}
+        routeIdError={routeIdError}
         handleBusIdChange={handleBusIdChange}
+        handleRouteIdChange={handleRouteIdChange}
         busId={busId}
+        routeId={routeId}
         setDate={setDate}
         setTime={setTime}
+        busIdInputRef={busIdInputRef}
+        routeIdInputRef={routeIdInputRef}
+        focusedInput={focusedInput}
       />
-      <div className='flex flex-col items-center gap-5 lg:gap-12'>
+      <div className="flex flex-col items-center gap-5 lg:gap-12">
         <InspectionFront />
         <InspectionRight />
         <InspectionBack />

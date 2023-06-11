@@ -57,7 +57,6 @@ export const AuthProvider = ({ children }) => {
       const displayName = currentUser.userdata?.name;
       setAuthCookies(tokenResult, displayName, currentUser.persona);
       setState({ user: userCredential.user });
-      console.log(currentUser.persona);
       switch(currentUser.persona){
         case "driver":
           navigate("/driver");

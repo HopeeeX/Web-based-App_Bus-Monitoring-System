@@ -1,16 +1,50 @@
 /* eslint-disable react/prop-types */
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 import tw from 'tailwind-styled-components';
 import InspectionModal from '../../components/Modals/InspectionModal';
 import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet'
 import DrawerIcon from '../../assets/icons/Menu.png'
+import { UserAuth } from '../../components/Auth/Auth';
+import { doc, updateDoc,getDoc } from "firebase/firestore";
+import { firestore } from '../../../firebase'
 
 
 const DriverMain = ({ handleSidebarToggle }) => {
   const [showModal, setShowModal] = useState(false);
+  const [onJourney, setOnJourney] = useState(false);
+  const [currentTrip, setCurrentTrip] = useState(null);
+  const { user } = UserAuth();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if(user){
+        const docRef = doc(firestore, "drivers", user.userInstance.uid);
+        const docSnap = await getDoc(docRef);
+        setOnJourney(docSnap.data().onJourney);
+        setCurrentTrip(docSnap.data().currentTrip);
+      }
+
+    }
+
+    fetchUser();
+
+  }, [onJourney, user])
 
   const handleOpenModal = () => {
     setShowModal(true);
+  };
+
+  const endTrip = async () => {
+    const tripRef = doc(firestore, "trips", currentTrip);
+    await updateDoc(tripRef, {
+      timeEnd: new Date().toTimeString().slice(0, 8)
+    });
+    const docRef = doc(firestore, "drivers", user.userInstance.uid);
+    await updateDoc(docRef, {
+      onJourney: false,
+      currentTrip: null
+    });
+    setOnJourney(false);
   };
 
   const handleCloseModal = () => {
@@ -30,7 +64,7 @@ const DriverMain = ({ handleSidebarToggle }) => {
   const DrawerButton = tw.img`
   md:hidden cursor-pointer fixed z-999 left-0 h-[32px] w-[32px] mt-3 ml-3`;
 
-  document.getElementById("sidebar").className = 'md:w-64 sm:w-0'
+
 
   const ShowSidebar = () => {
     handleSidebarToggle();
@@ -48,10 +82,10 @@ const DriverMain = ({ handleSidebarToggle }) => {
             </Popup>
             </Marker>
             </MapContainer>
-        <DrawerButton src={DrawerIcon} alt='drawer-button' onClick={ShowSidebar}/>s
-        <TripButton onClick={handleOpenModal}>
-          Create a Trip
-        </TripButton>
+        <DrawerButton src={DrawerIcon} alt='drawer-button' onClick={ShowSidebar}/>
+        
+  {onJourney ? <TripButton onClick={endTrip}>End Trip</TripButton> : <TripButton onClick={handleOpenModal}>Create a Trip</TripButton>}
+
       {showModal && (
         <ModalWrapper>
           <InspectionModal onClose={handleCloseModal} /> 

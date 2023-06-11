@@ -5,10 +5,27 @@ function cut(str, cutStart, cutEnd) {
   return str.substr(0, cutStart) + str.substr(cutEnd + 1);
 }
 
-const InspectionFieldInput = ({ busIdError, handleBusIdChange, busId, setDate, setTime }) => {
-  const busIdInputRef = useRef(null);
+const InspectionFieldInput = ({
+  busIdError,
+  routeIdError,
+  handleBusIdChange,
+  handleRouteIdChange,
+  busId,
+  routeId,
+  setDate,
+  setTime,
+  busIdInputRef,
+  routeIdInputRef,
+  focusedInput
+}) => {
 
   useEffect(() => {
+    if(focusedInput == 'bus'){
+      busIdInputRef.current.focus();
+    }
+    if(focusedInput == 'route'){
+      routeIdInputRef.current.focus();
+    }
     var date = new Date();
     const dateInput = document.getElementById('dateInput');
     const timeInput = document.getElementById('timeInput');
@@ -22,10 +39,7 @@ const InspectionFieldInput = ({ busIdError, handleBusIdChange, busId, setDate, s
     setDate(dateInput.value);
     setTime(timeInput.value);
 
-    busIdInputRef.current.focus();
-  }, [setDate, setTime]);
-
-
+  }, [busIdInputRef, focusedInput, routeIdInputRef, setDate, setTime]);
 
   return (
     <div className="flex flex-col md:flex-row justify-between w-full px-4 md:px-16 xl:px-32 font-inter font-semibold text-fontColor text-sm md:text-base mb-7 md:mb-11 lg:mb-16">
@@ -43,6 +57,22 @@ const InspectionFieldInput = ({ busIdError, handleBusIdChange, busId, setDate, s
         />
         {busIdError && <span className="text-red-500">{busIdError}</span>}
       </div>
+      
+      <div className="flex flex-col md:mb-3">
+        <label htmlFor="routeIdInput">Route ID</label>
+        <input
+          type="text"
+          id="routeIdInput"
+          placeholder="Enter Route ID"
+          className="inspectionInputs w-full md:w-48 lg:w-64 xl:w-80 focus:outline-none focus:border-fontColor"
+          required
+          value={routeId}
+          onChange={handleRouteIdChange}
+          ref={routeIdInputRef}
+        />
+        {routeIdError && <span className="text-red-500">{routeIdError}</span>}
+      </div>
+      
       <div className="flex flex-col md:flex-row md:gap-5">
         <div className="flex flex-col md:mb-3">
           <label htmlFor="dateInput">Date</label>

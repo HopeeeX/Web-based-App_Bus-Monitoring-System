@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { firestore } from '../../../firebase';
 import AddButton from '../../components/Table/AddButton';
 import SearchFieldAdmin from '../../components/Table/SearchFieldAdmin';
@@ -60,6 +60,30 @@ const AdminList = () => {
 
     fetchAdmins();
   }, [admins]);
+
+  const handleDeleteUser = async (userId) => {
+    try {
+      setLoading(true); // Set loading state to true
+      // Delete user from Firestore collection
+      const userDocRef = doc(firestore, 'admins', userId);
+      await deleteDoc(userDocRef);
+
+      // Reload the drivers data from Firestore
+      
+
+      const adminsCollection = collection(firestore, 'admins');
+      const querySnapshot = await getDocs(adminsCollection);
+      const fetchedAdmins = [];
+      querySnapshot.forEach((doc) => {
+        const adminsData = { ...doc.data(), userId: doc.id };
+        fetchedAdmins.push(adminsData);
+      });
+      setAdmins(fetchedAdmins);
+      setLoading(false); // Set loading state back to false
+    } catch (error) {
+      console.log('Error deleting user:', error);
+    }
+  };
 
   const handleAddUser = async () => {
     try {
@@ -130,6 +154,7 @@ const AdminList = () => {
                   <Row
                     key={admin.userId}
                     text={[admin.name, admin.userId, admin.email]}
+                    onDelete={() => handleDeleteUser(admin.userId)}
                   />
                 ))}
               </tbody>

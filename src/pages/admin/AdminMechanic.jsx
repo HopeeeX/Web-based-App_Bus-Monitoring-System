@@ -5,7 +5,7 @@ import SearchFieldAdmin from "../../components/Table/SearchFieldAdmin";
 import Header from "../../components/Table/Header";
 import Row from "../../components/Table/RowAdmin";
 import AddUserModal from "../../components/Modals/AddUserModal";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { firestore } from "../../../firebase";
 
 const Wrapper = tw.div`
@@ -44,6 +44,30 @@ const AdminMechanic = () => {
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
+  };
+
+  const handleDeleteUser = async (userId) => {
+    try {
+      setLoading(true); // Set loading state to true
+      // Delete user from Firestore collection
+      const userDocRef = doc(firestore, 'mechanics', userId);
+      await deleteDoc(userDocRef);
+
+      // Reload the drivers data from Firestore
+      
+
+      const mechanicsCollection = collection(firestore, 'mechanics');
+      const querySnapshot = await getDocs(mechanicsCollection);
+      const fetchedMechanics = [];
+      querySnapshot.forEach((doc) => {
+        const mechanicsData = { ...doc.data(), userId: doc.id };
+        fetchedMechanics.push(mechanicsData);
+      });
+      setRows(fetchedMechanics);
+      setLoading(false); // Set loading state back to false
+    } catch (error) {
+      console.log('Error deleting user:', error);
+    }
   };
 
   const handleAddUser = async () => {
@@ -146,6 +170,7 @@ const AdminMechanic = () => {
                       row.phone,
                       row.license,
                     ]}
+                    onDelete={() => handleDeleteUser(row.userId)}
                   />
                 ))}
               </tbody>

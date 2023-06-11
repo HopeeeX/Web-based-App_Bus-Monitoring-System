@@ -11,15 +11,20 @@ const Wrapper = tw.div`
 const DriverDB = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const location = useLocation();
+  if(showSidebar == false){
+    var sidebarToggle = 'md:w-64 sm:w-0'
+  } else if(showSidebar == true){
+    sidebarToggle = 'md:w-64 sm:w-auto'
+  }
   
   const handleSidebarToggle = () => {
-    document.getElementById("sidebar").className = 'md:w-64 sm:w-auto'
-    
     setShowSidebar(!showSidebar);
+
   };
+  
   return (
     <Wrapper>
-      <div className='md:w-64 sm:w-auto' id='sidebar'>
+      <div className={sidebarToggle} id='sidebar'>
         <SideBarDriver showSidebar={showSidebar} handleSidebarToggle={handleSidebarToggle} />
       </div>
       {/* Render the child routes based on the URL path */}

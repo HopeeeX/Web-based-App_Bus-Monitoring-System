@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState} from 'react';
 import tw from 'tailwind-styled-components';
 import InspectionModal from '../../components/Modals/InspectionModal';
@@ -5,7 +6,7 @@ import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet'
 import DrawerIcon from '../../assets/icons/Menu.png'
 
 
-const DriverMain = () => {
+const DriverMain = ({ handleSidebarToggle }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleOpenModal = () => {
@@ -29,8 +30,10 @@ const DriverMain = () => {
   const DrawerButton = tw.img`
   md:hidden cursor-pointer fixed z-999 left-0 h-[32px] w-[32px] mt-3 ml-3`;
 
-  function ShowSidebar(){
-    console.log("Hello");
+  document.getElementById("sidebar").className = 'md:w-64 sm:w-0'
+
+  const ShowSidebar = () => {
+    handleSidebarToggle();
   }
 
   return (

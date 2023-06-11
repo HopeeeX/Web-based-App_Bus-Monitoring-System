@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import SearchFieldUser from '../../components/Table/SearchFieldUser';
 import Header from '../../components/Table/Header';
-import Row from '../../components/Table/RowUser';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import { firestore } from '../../../firebase';
+import Row from '../../components/Table/RowUser';
+import { UserAuth } from '../../components/Auth/Auth';
 
 
 const Wrapper = tw.div`
@@ -20,25 +21,34 @@ const TableContainer = tw.div`
 `;
 
 const DriverReports = () => {
+  const { user } = UserAuth(); // Access the current user from UserAuth context
   const [searchTerm, setSearchTerm] = useState('');
   const [reports, setReports] = useState([]);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
+  
 
   useEffect(() => {
-    const fetchReports = async () => {
-      const querySnapshot = await getDocs(collection(firestore, 'inspection_reports'));
-      const fetchedReports = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setReports(fetchedReports);
+
+    const fetchReports = async () => { 
+      if (user) {
+        const currentUserId = await user.userInstance.uid;
+        
+        // Create a query to filter reports by the current user's ID
+        const q = query(collection(firestore, 'inspection_reports'), where('driver', '==', currentUserId));
+        const querySnapshot = await getDocs(q);
+        const fetchedReports = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setReports(fetchedReports);
+      }
     };
 
     fetchReports();
-  }, []);
+  }, [user]); // Fetch reports whenever the user changes
 
   // Filter rows based on the search term
   const filteredRows = reports.filter((report) =>

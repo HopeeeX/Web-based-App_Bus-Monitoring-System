@@ -65,7 +65,7 @@ const InspectionData = () => {
   if (!inspectionData) {
     return null; // Render a loading state or fallback component if data is still loading
   }
-
+console.log(inspectionData.damaged)
   return (
     <Wrapper>
       <Header>
@@ -93,7 +93,8 @@ const InspectionData = () => {
       <Row>
         <h3 className="font-inter font-medium text-[15px] text-gray-500">Inspected Items:</h3>
         <div>
-          <h3 className="ml-4 md:ml-16 font-inter font-medium text-[15px] text-gray-700 mb-2">FRONT</h3>
+          
+          {/* <h3 className="ml-4 md:ml-16 font-inter font-medium text-[15px] text-gray-700 mb-2">FRONT</h3>
           <Container>
             <h4 className="font-inter text-sm text-gray-500 mt-1 sm:mb-2">Front Signage LED</h4>
             <button
@@ -105,7 +106,7 @@ const InspectionData = () => {
             >
               {isHovered ? 'View Photo' : 'Damaged'}
             </button>
-          </Container>
+          </Container> */}
         </div>
       </Row>
     </Wrapper>

@@ -8,13 +8,15 @@ const InspectionLeft = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
   const { toggleDamaged } = InspectionAccess();
+  const [selectedItemTitle, setSelectedItemTitle] = useState(null)
 
   const handleToggle = (item) => {
-    if (!toggleState[item.id]) {
+    if (!toggleState[item.title]) {
       setSelectedItemId(item.id);
+      setSelectedItemTitle(item.title)
       setIsModalOpen(true);
     } else {
-      updateToggleState(item.id);
+      updateToggleState(item.title);
     }
   };
 
@@ -29,11 +31,12 @@ const InspectionLeft = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedItemId(null);
+    setSelectedItemTitle(null)
   };
 
   const handleUpload = () => {
-    if (selectedItemId) {
-      updateToggleState(selectedItemId);
+    if (selectedItemTitle) {
+      updateToggleState(selectedItemTitle);
       closeModal();
     }
   };
@@ -47,14 +50,14 @@ const InspectionLeft = () => {
             <p className="w-9/12 py-1 md:py-2 lg:py-[10px] pl-2 md:pl-4 lg:pl-8 text-start text-inspectionList bg-[#E6E3E3BA]">{item.title}</p>
             <button
               className={`border outline-none w-3/12 py-1 md:py-2 lg:py-[10px] px-1 ${
-                toggleState[item.id] ? 'bg-[#FF8B85] text-[#BF4842]' : 'bg-[#77DD77] text-[#106710E0]'
+                toggleState[item.title] ? 'bg-[#FF8B85] text-[#BF4842]' : 'bg-[#77DD77] text-[#106710E0]'
               }`}
               onClick={() => handleToggle(item)}
             >
-              {toggleState[item.id] ? 'Damaged' : 'Damage'}
+              {toggleState[item.title] ? 'Damaged' : 'Damage'}
             </button>
             {isModalOpen && (
-              <UploadPhoto onClose={closeModal} onUpload={handleUpload} itemId={selectedItemId} />
+ <UploadPhoto onClose={closeModal} onUpload={handleUpload} itemId={selectedItemId} itemTitle={selectedItemTitle}  />
             )}
           </div>
         ))}

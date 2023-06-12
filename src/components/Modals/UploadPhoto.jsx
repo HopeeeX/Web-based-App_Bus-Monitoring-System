@@ -4,7 +4,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../firebase";
 import { InspectionAccess } from '../../pages/driver/inspectionLists/InspectionContext';
 
-const UploadPhoto = ({ onClose, onUpload, itemId }) => {
+const UploadPhoto = ({ onClose, onUpload, itemId, itemTitle }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewURL, setPreviewURL] = useState(null);
   const { newReportID } = InspectionAccess();
@@ -17,7 +17,7 @@ const UploadPhoto = ({ onClose, onUpload, itemId }) => {
 
   const handleUpload = () => {
     if (selectedFile) {
-      const storageRef = ref(storage, "reports/" + newReportID + "/" + itemId);
+      const storageRef = ref(storage, "reports/" + newReportID + "/" + itemTitle);
       uploadBytes(storageRef, selectedFile).then(() => {
         getDownloadURL(storageRef).then((downloadURL) => {
           console.log("File uploaded:", selectedFile.name);

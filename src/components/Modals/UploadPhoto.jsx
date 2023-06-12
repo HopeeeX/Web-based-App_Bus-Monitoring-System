@@ -1,13 +1,18 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "../../../firebase";
+import { firestore, storage } from "../../../firebase";
 import { InspectionAccess } from '../../pages/driver/inspectionLists/InspectionContext';
+import { doc, getDoc } from 'firebase/firestore';
 
 const UploadPhoto = ({ onClose, onUpload, itemId, itemTitle }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewURL, setPreviewURL] = useState(null);
-  const { newReportID } = InspectionAccess();
+
+  function ReportIDGenerate(number) {
+    const paddedNumber = String(number).padStart(5, '0');
+    return 'R' + paddedNumber;
+  }
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -15,8 +20,12 @@ const UploadPhoto = ({ onClose, onUpload, itemId, itemTitle }) => {
     setPreviewURL(URL.createObjectURL(file));
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (selectedFile) {
+      const reportsCounterRef = doc(firestore, 'counters', 'reports');
+      const countDoc = await getDoc(reportsCounterRef);
+      const count = countDoc.data().count;
+      const newReportID = ReportIDGenerate(count);
       const storageRef = ref(storage, "reports/" + newReportID + "/" + itemTitle);
       uploadBytes(storageRef, selectedFile).then(() => {
         getDownloadURL(storageRef).then((downloadURL) => {

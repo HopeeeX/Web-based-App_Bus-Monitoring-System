@@ -23,7 +23,7 @@ function TripIDGenerate(number) {
 }
 
 const InspectionChecklist = () => {
-  const { damaged, busId, setBusId, routeId, setRouteId, newReportID, setNewReportID, reportCount, setReportCount } = InspectionAccess();
+  const { damaged, busId, setBusId, routeId, setRouteId, setNewReportID, setReportCount } = InspectionAccess();
   const [busIdError, setBusIdError] = useState('');
   const [routeIdError, setRouteIdError] = useState('');
   const [date, setDate] = useState('');
@@ -50,23 +50,26 @@ const InspectionChecklist = () => {
     const fetchUser = async () => {
       if(user){
         setCurrentUser(user.userInstance.uid);
-        const reportsCounterRef = doc(firestore, 'counters', 'reports');
-        setReportCount((await getDoc(reportsCounterRef)).data().count + 1);
-        setNewReportID(ReportIDGenerate(reportCount));
       }
 
     }
 
     fetchUser();
 
-  }, [reportCount, setNewReportID, setReportCount, user])
+  }, [setNewReportID, setReportCount, user])
   
 
   const submitReport = async () => {
+    const reportsCounterRef = doc(firestore, 'counters', 'reports');
+    const countDoc = await getDoc(reportsCounterRef);
+    const count = countDoc.data().count;
+    const newReportID = ReportIDGenerate(count);
+    setReportCount(count);
+    setNewReportID(newReportID);
     if (damaged.length === 0 && busId !== '' && routeId !== '') {
       const reportsCounterRef = doc(firestore, 'counters', 'reports');
       await setDoc(reportsCounterRef, {
-        count: reportCount,
+        count: count+1,
       });
       await setDoc(doc(firestore, 'inspection_reports', newReportID), {
         date: date,
@@ -103,8 +106,33 @@ const InspectionChecklist = () => {
         alert('Remarks is required.');
         return;
       }
-      // TODO: Submit Damaged Bus
     }
+
+    if(damaged.length !== 0 && busId !== '' && routeId !== ''){
+      const reportsCounterRef = doc(firestore, 'counters', 'reports');
+      await setDoc(reportsCounterRef, {
+        count: count+1,
+      });
+      await setDoc(doc(firestore, 'inspection_reports', newReportID), {
+        date: date,
+        damaged: damaged,
+        bus: busId,
+        mechanic: 'N/A',
+        remarks: '',
+        status: 'Pending',
+        time: time,
+      });
+    } else if (busId === '') {
+      alert('Bus ID is required.');
+      return;
+    } else {
+      const remarksInput = document.getElementById('remarksInput');
+      if (!remarksInput.value.trim()) {
+        alert('Remarks is required.');
+        return;
+      }
+    }
+    
     navigate('/driver');
   };
 

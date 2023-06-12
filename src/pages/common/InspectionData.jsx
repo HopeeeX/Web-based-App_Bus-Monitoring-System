@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import Back from '../../assets/icons/CircleBack.png';
 import { Link, useParams } from 'react-router-dom';
-import { firestore } from '../../../firebase';
+import { firestore, storage } from '../../../firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import { getDownloadURL, ref } from "firebase/storage";
 
 const Wrapper = tw.div`
   w-full md:w-3/5 sm:mx-auto md:mx-auto lg:ml-[300px] sm:mt-16 sm:mr-5 sm:ml-5 pb-10 rounded-lg shadow-lg
@@ -62,10 +63,25 @@ const InspectionData = () => {
     setIsHovered(!isHovered);
   };
 
+  const viewPhoto = async (itemTitle) => {
+    try {
+      // Assuming you have a storage reference for the photo
+      const photoRef = ref(storage, "reports/" + inspectionID + "/" + itemTitle)
+
+      // Get the download URL for the photo
+      const downloadURL = await getDownloadURL(photoRef);
+
+      // Open the photo in a new window or perform any other action
+      window.open(downloadURL);
+    } catch (error) {
+      console.error('Error fetching photo:', error);
+    }
+  };
+
   if (!inspectionData) {
     return null; // Render a loading state or fallback component if data is still loading
   }
-console.log(inspectionData.damaged)
+
   return (
     <Wrapper>
       <Header>
@@ -93,20 +109,24 @@ console.log(inspectionData.damaged)
       <Row>
         <h3 className="font-inter font-medium text-[15px] text-gray-500">Inspected Items:</h3>
         <div>
-          
-          {/* <h3 className="ml-4 md:ml-16 font-inter font-medium text-[15px] text-gray-700 mb-2">FRONT</h3>
-          <Container>
-            <h4 className="font-inter text-sm text-gray-500 mt-1 sm:mb-2">Front Signage LED</h4>
-            <button
-              className={`sm:ml-3 px-4 py-1 rounded-lg font-inter text-sm border outline-none ${
-                isHovered ? 'bg-primary text-white' : 'bg-[#FF8B85] text-white'
-              } hover:bg-primary hover:text-white transition-colors duration-300`}
-              onMouseEnter={handleHover}
-              onMouseLeave={handleHover}
-            >
-              {isHovered ? 'View Photo' : 'Damaged'}
-            </button>
-          </Container> */}
+          {inspectionData.damaged.map((itemTitle) => (
+            <React.Fragment key={itemTitle}>
+              <h3 className="ml-4 md:ml-16 font-inter font-medium text-[15px] text-gray-700 mb-2"/>
+              <Container>
+                <h4 className="font-inter text-sm text-gray-500 mt-1 sm:mb-2">{itemTitle}</h4>
+                <button
+                  className={`sm:ml-3 px-4 py-1 rounded-lg font-inter text-sm border outline-none ${
+                    isHovered ? 'bg-primary text-white' : 'bg-[#FF8B85] text-white'
+                  } hover:bg-primary hover:text-white transition-colors duration-300`}
+                  onMouseEnter={handleHover}
+                  onMouseLeave={handleHover}
+                  onClick={() => viewPhoto(itemTitle)}
+                >
+                  {isHovered ? 'View Photo' : 'Damaged'}
+                </button>
+              </Container>
+            </React.Fragment>
+          ))}
         </div>
       </Row>
     </Wrapper>

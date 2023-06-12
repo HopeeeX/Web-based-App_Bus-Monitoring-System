@@ -17,7 +17,7 @@ const DriverMain = ({ handleSidebarToggle }) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      if(user){
+      if(user && user.userInstance){
         const docRef = doc(firestore, "drivers", user.userInstance.uid);
         const docSnap = await getDoc(docRef);
         setOnJourney(docSnap.data().onJourney);

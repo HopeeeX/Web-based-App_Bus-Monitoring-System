@@ -11,7 +11,6 @@ const RowAdmin = ({ text, onDelete }) => {
           if (typeof row === 'number') {
             row = row.toString();
           }
-          console.log(row)
         if (row.includes("status=")) {
           row = row.replace("status=", "");
           return (

@@ -1,7 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, setPersistence, browserSessionPersistence } from "firebase/auth";
-import { getFirestore } from "firebase/firestore"; 
+import { getFirestore } from "firebase/firestore";
+import { getDatabase } from "firebase/database"; 
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -23,3 +24,6 @@ setPersistence(auth, browserSessionPersistence);
 
 // Initialize Firestore
 export const firestore = getFirestore(app);
+
+// Initialize Firebase Realtime Database
+export const database = getDatabase(app);

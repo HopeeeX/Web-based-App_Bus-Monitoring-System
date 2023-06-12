@@ -1,9 +1,13 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../../../firebase";
+import { InspectionAccess } from '../../pages/driver/inspectionLists/InspectionContext';
 
-const UploadPhoto = ({ onClose, onUpload }) => {
+const UploadPhoto = ({ onClose, onUpload, itemId }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewURL, setPreviewURL] = useState(null);
+  const { newReportID } = InspectionAccess();
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -13,10 +17,20 @@ const UploadPhoto = ({ onClose, onUpload }) => {
 
   const handleUpload = () => {
     if (selectedFile) {
-      console.log("File uploaded:", selectedFile.name);
-      setSelectedFile(null); 
-      onUpload(); 
-      onClose(); 
+      const storageRef = ref(storage, "reports/" + newReportID + "/" + itemId);
+      uploadBytes(storageRef, selectedFile).then(() => {
+        getDownloadURL(storageRef).then((downloadURL) => {
+          console.log("File uploaded:", selectedFile.name);
+          console.log("Download URL:", downloadURL);
+          setSelectedFile(null);
+          onUpload();
+          onClose();
+        }).catch((error) => {
+          console.error("Error getting download URL:", error);
+        });
+      }).catch((error) => {
+        console.error("Error uploading file:", error);
+      });
     }
   };
 

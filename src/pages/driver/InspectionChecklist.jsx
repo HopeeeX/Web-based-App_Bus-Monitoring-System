@@ -23,17 +23,15 @@ function TripIDGenerate(number) {
 }
 
 const InspectionChecklist = () => {
-  const { damaged } = InspectionAccess();
+  const { damaged, busId, setBusId, routeId, setRouteId, newReportID, setNewReportID, reportCount, setReportCount } = InspectionAccess();
   const [busIdError, setBusIdError] = useState('');
   const [routeIdError, setRouteIdError] = useState('');
-  const [busId, setBusId] = useState('');
-  const [routeId, setRouteId] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
-  const [focusedInput, setFocusedInput] = useState("")
+  const [focusedInput, setFocusedInput] = useState("");
   const busIdInputRef = useRef(null);
   const routeIdInputRef = useRef(null);
-  const [currentUser, setCurrentUser] = useState(null)
+  const [currentUser, setCurrentUser] = useState(null);
   const { user } = UserAuth();
 
   const handleBusIdChange = (e) => {
@@ -52,23 +50,24 @@ const InspectionChecklist = () => {
     const fetchUser = async () => {
       if(user){
         setCurrentUser(user.userInstance.uid);
+        const reportsCounterRef = doc(firestore, 'counters', 'reports');
+        setReportCount((await getDoc(reportsCounterRef)).data().count + 1);
+        setNewReportID(ReportIDGenerate(reportCount));
       }
 
     }
 
     fetchUser();
 
-  }, [user])
+  }, [reportCount, setNewReportID, setReportCount, user])
   
 
   const submitReport = async () => {
     if (damaged.length === 0 && busId !== '' && routeId !== '') {
       const reportsCounterRef = doc(firestore, 'counters', 'reports');
-      var reportCount = (await getDoc(reportsCounterRef)).data().count + 1;
       await setDoc(reportsCounterRef, {
         count: reportCount,
       });
-      const newReportID = ReportIDGenerate(reportCount);
       await setDoc(doc(firestore, 'inspection_reports', newReportID), {
         date: date,
         damaged: damaged,

@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, setPersistence, browserSessionPersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getDatabase } from "firebase/database"; 
+import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -27,3 +28,6 @@ export const firestore = getFirestore(app);
 
 // Initialize Firebase Realtime Database
 export const database = getDatabase(app);
+
+// Initialize Firebase Storage
+export const storage = getStorage(app);

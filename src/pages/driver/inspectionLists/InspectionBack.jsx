@@ -11,12 +11,12 @@ const InspectionBack = () => {
   const [selectedItemId, setSelectedItemId] = useState(null);
   const { toggleDamaged } = InspectionAccess();
 
-  const handleToggle = (id) => {
-    if (!toggleState[id]) {
-      setSelectedItemId(id);
+  const handleToggle = (item) => {
+    if (!toggleState[item.id]) {
+      setSelectedItemId(item.id);
       setIsModalOpen(true);
     } else {
-      updateToggleState(id);
+      updateToggleState(item.id);
     }
   };
   
@@ -55,12 +55,13 @@ const InspectionBack = () => {
             >
               {toggleState[item.id] ? "Damaged" : "Damage"}
             </button>
+            {isModalOpen && (
+        <UploadPhoto onClose={closeModal} onUpload={handleUpload} itemId={item.title}  />
+      )}
           </div>
         ))}
     </div>
-    {isModalOpen && (
-        <UploadPhoto onClose={closeModal} onUpload={handleUpload} />
-      )}
+
     </div>
   )
 }

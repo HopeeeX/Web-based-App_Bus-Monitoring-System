@@ -7,6 +7,10 @@ export const InspectionContext = createContext()
 
 export const InspectionProvider = ({ children }) => {
   const [damaged, setDamaged] = useState([]);
+  const [busId, setBusId] = useState('');
+  const [routeId, setRouteId] = useState('');
+  const [newReportID, setNewReportID] = useState(null);
+  const [reportCount, setReportCount] = useState(null);
 
   const toggleDamaged = (part) => {
     const currentDamaged = damaged;
@@ -21,7 +25,7 @@ export const InspectionProvider = ({ children }) => {
   }
 
   return (
-    <InspectionContext.Provider value={{ damaged, toggleDamaged }}>
+    <InspectionContext.Provider value={{ reportCount, setReportCount, damaged, toggleDamaged, busId, setBusId, routeId, setRouteId, newReportID, setNewReportID }}>
       {children}
     </InspectionContext.Provider>
   );

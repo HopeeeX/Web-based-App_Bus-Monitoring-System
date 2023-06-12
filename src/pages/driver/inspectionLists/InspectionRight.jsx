@@ -10,12 +10,12 @@ const InspectionRight = () => {
   const [selectedItemId, setSelectedItemId] = useState(null);
   const { toggleDamaged } = InspectionAccess();
 
-  const handleToggle = (id) => {
-    if (!toggleState[id]) {
-      setSelectedItemId(id);
+  const handleToggle = (item) => {
+    if (!toggleState[item.id]) {
+      setSelectedItemId(item.id);
       setIsModalOpen(true);
     } else {
-      updateToggleState(id);
+      updateToggleState(item.id);
     }
   };
   
@@ -50,16 +50,17 @@ const InspectionRight = () => {
               className={`border outline-none w-3/12 py-1 md:py-2 lg:py-[10px] px-1 ${
                 toggleState[item.id] ? "bg-[#FF8B85] text-[#BF4842]" : "bg-[#77DD77] text-[#106710E0]"
               }`}
-              onClick={() => handleToggle(item.id)}
+              onClick={() => handleToggle(item)}
             >
               {toggleState[item.id] ? "Damaged" : "Damage"}
             </button>
+            {isModalOpen && (
+        <UploadPhoto onClose={closeModal} onUpload={handleUpload} itemId={item.title}  />
+      )}
           </div>
         ))}
       </div>
-      {isModalOpen && (
-        <UploadPhoto onClose={closeModal} onUpload={handleUpload} />
-      )}
+
       </div>
   )
 }

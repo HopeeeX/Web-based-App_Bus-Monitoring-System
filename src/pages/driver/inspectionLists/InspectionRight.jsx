@@ -55,7 +55,7 @@ const InspectionRight = () => {
               {toggleState[item.id] ? "Damaged" : "Damage"}
             </button>
             {isModalOpen && (
-        <UploadPhoto onClose={closeModal} onUpload={handleUpload} itemId={item.title}  />
+        <UploadPhoto onClose={closeModal} onUpload={handleUpload} itemId={selectedItemId}  />
       )}
           </div>
         ))}

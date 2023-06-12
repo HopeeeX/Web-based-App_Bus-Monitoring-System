@@ -30,7 +30,7 @@ const AdminDB = () => {
                 if(data == 1){
                     const confirmed = window.confirm(`Emergency detected for bus ${busId}! Press OK to reset.`);
                     if(confirmed) {
-                        set(realtimeBus, 0);
+                        set(realtimeBus, "notified");
                     }
                     
                 }

@@ -11,6 +11,7 @@ import { InspectionAccess } from './inspectionLists/InspectionContext';
 import { firestore } from '../../../firebase';
 import { doc, getDoc, setDoc, getDocs, query, where, collection, updateDoc} from 'firebase/firestore';
 import { UserAuth } from '../../components/Auth/Auth';
+import Cookies from 'js-cookie';
 
 function ReportIDGenerate(number) {
   const paddedNumber = String(number).padStart(5, '0');
@@ -90,7 +91,8 @@ const InspectionChecklist = () => {
         date: date,
         timeStart: time,
         route: routeId,
-        timeEnd: "On Journey"
+        timeEnd: "On Journey",
+        driver: Cookies.get("name")
       });
 
       await updateDoc(doc(firestore, 'drivers', currentUser), {

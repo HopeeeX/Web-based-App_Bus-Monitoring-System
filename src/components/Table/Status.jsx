@@ -28,14 +28,14 @@ const getStatusBackgroundColor = (status) => {
     return 'bg-[#FBFB79E0] text-[#A7A9AC]';
   } else if (status === 'Approved') {
     return 'bg-[#77DD77E0] text-white';
-  } else if (status === 'Unapproved') {
+  } else if (status === 'Disapproved') {
     return 'bg-[#FF6961E0] text-white';
   }
 };
 
 const Status = ({ status, reportId, onStatusChange }) => {
   const [editableStatus, setEditableStatus] = useState(status);
-  const [persona, setPersona] = useState(document.cookie.includes('persona=mechanic'));
+  const persona = document.cookie.includes('persona=mechanic');
 
   const handleStatusChange = async (event) => {
     if (!persona || editableStatus !== 'Pending') return; // Check if persona is not mechanic or status is not Pending, then return and do nothing
@@ -69,7 +69,7 @@ const Status = ({ status, reportId, onStatusChange }) => {
         <option value='Approved' className='bg-white text-[#A7A9AC]'>
           Approved
         </option>
-        <option value='Unapproved' className='bg-white text-[#A7A9AC]'>
+        <option value='Disapproved' className='bg-white text-[#A7A9AC]'>
           Unapproved
         </option>
       </select>

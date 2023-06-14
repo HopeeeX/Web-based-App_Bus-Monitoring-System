@@ -117,7 +117,7 @@ const handleSidebarToggle = () => {
             </SidebarTitleWrapper>
             <MenuItem to='/mechanic' iconSrc={Folder} iconAlt='folder' text='Pending Reports'/>
             <MenuItem to='/mechanic/approved' iconSrc={Folder} iconAlt='folder' text='Approved Reports'/>
-            <MenuItem to='/mechanic/unapproved' iconSrc={Folder} iconAlt='folder' text='Unapproved Reports'/>
+            <MenuItem to='/mechanic/unapproved' iconSrc={Folder} iconAlt='folder' text='Disapproved Reports'/>
             <Logout/>
         </SidebarMenu>
     </SidebarWrapper>

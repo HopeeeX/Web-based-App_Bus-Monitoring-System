@@ -30,7 +30,7 @@ const MechanicUnapproved = () => {
   useEffect(() => {
     const fetchReportData = async () => {
       const reportsRef = collection(firestore, 'inspection_reports');
-      const querySnapshot = await getDocs(query(reportsRef, where('status', '==', 'Unapproved')));
+      const querySnapshot = await getDocs(query(reportsRef, where('status', '==', 'Disapproved')));
       const data = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),

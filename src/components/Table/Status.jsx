@@ -70,7 +70,7 @@ const Status = ({ status, reportId, onStatusChange }) => {
           Approved
         </option>
         <option value='Disapproved' className='bg-white text-[#A7A9AC]'>
-          Unapproved
+          Disapproved
         </option>
       </select>
     </div>

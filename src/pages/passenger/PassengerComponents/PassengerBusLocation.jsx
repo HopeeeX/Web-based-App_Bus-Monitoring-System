@@ -32,7 +32,7 @@ const PassengerBusLocation = ({ busID, busData }) => {
       <div className='flex flex-col gap-4'>
         <h3 className='font-medium text-center text-2xl md:text-3xl lg:text-[32px] text-[#303030]'>Bus Location Update</h3>
         <div className='lg:w-[40vw] xl:w-[628px] h-96 lg:h-[451px] border-white border-8 rounded-lg'>
-          <MapContainer id='map' center={[latitude, longitude]} zoom={20} scrollWheelZoom={true} zoomControl={false} className='z-0 h-full w-full'>
+          <MapContainer id='map' center={[latitude, longitude]} zoom={40} scrollWheelZoom={true} zoomControl={false} className='z-0 h-full w-full'>
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

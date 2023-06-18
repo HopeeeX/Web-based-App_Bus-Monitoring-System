@@ -61,13 +61,15 @@ const InspectionChecklist = () => {
   
 
   const submitReport = async () => {
+    const remarksInput = document.getElementById('remarksInput');
     const reportsCounterRef = doc(firestore, 'counters', 'reports');
     const countDoc = await getDoc(reportsCounterRef);
     const count = countDoc.data().count;
     const newReportID = ReportIDGenerate(count);
     setReportCount(count);
     setNewReportID(newReportID);
-    if (damaged.length === 0 && busId !== '' && routeId !== '') {
+    if (damaged.length === 0 && routeId !== '') {
+      Cookies.set("currentBus", busId);
       const reportsCounterRef = doc(firestore, 'counters', 'reports');
       await setDoc(reportsCounterRef, {
         count: count+1,
@@ -99,18 +101,8 @@ const InspectionChecklist = () => {
         onJourney: true,
         currentTrip: newTripID
       })
-    } else if (busId === '') {
-      alert('Bus ID is required.');
-      return;
-    } else {
-      const remarksInput = document.getElementById('remarksInput');
-      if (!remarksInput.value.trim()) {
-        alert('Remarks is required.');
-        return;
-      }
-    }
-
-    if(damaged.length !== 0 && busId !== '' && routeId !== ''){
+      navigate('/driver');
+    } else     if(damaged.length !== 0 && busId !== '' && routeId !== ''){
       const reportsCounterRef = doc(firestore, 'counters', 'reports');
       await setDoc(reportsCounterRef, {
         count: count+1,
@@ -124,18 +116,16 @@ const InspectionChecklist = () => {
         status: 'Pending',
         time: time,
       });
+      navigate('/driver');
     } else if (busId === '') {
       alert('Bus ID is required.');
       return;
-    } else {
-      const remarksInput = document.getElementById('remarksInput');
-      if (!remarksInput.value.trim()) {
+    } else if (!remarksInput.value.trim()) {
         alert('Remarks is required.');
         return;
-      }
     }
     
-    navigate('/driver');
+
   };
 
   const navigate = useNavigate();
